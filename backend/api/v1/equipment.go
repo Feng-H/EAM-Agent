@@ -542,6 +542,16 @@ func ListEquipment(c *gin.Context) {
 		PageSize:   query.PageSize,
 	}
 
+	role, _ := middleware.GetUserRole(c)
+	userFID, hasFID := middleware.GetFactoryID(c)
+	if role != "admin" && hasFID && userFID != nil {
+		if query.FactoryID != nil && *query.FactoryID != *userFID {
+			c.JSON(http.StatusForbidden, gin.H{"error": "无权跨工厂查看其他工厂的设备资产"})
+			return
+		}
+		filter.FactoryID = userFID
+	}
+
 	result, err := equipmentService.List(filter)
 	if err != nil {
 		response.Error(c, http.StatusInternalServerError, err)
@@ -574,6 +584,15 @@ func GetEquipment(c *gin.Context) {
 	if err != nil {
 		handleServiceError(c, err)
 		return
+	}
+
+	role, _ := middleware.GetUserRole(c)
+	userFID, hasFID := middleware.GetFactoryID(c)
+	if role != "admin" && hasFID && userFID != nil && equipment.Workshop != nil {
+		if equipment.Workshop.FactoryID != *userFID {
+			c.JSON(http.StatusForbidden, gin.H{"error": "无权查看其他工厂的设备资产"})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, equipmentToResponse(equipment))

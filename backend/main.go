@@ -477,23 +477,25 @@ func setupDatabaseRoutes(router *gin.Engine) {
 			// Organization routes
 			org := protected.Group("/organization")
 			{
-				// Bases
+				// Read operations (all authenticated users)
 				org.GET("/bases", v1.ListBases)
-				org.POST("/bases", v1.CreateBase)
-				org.PUT("/bases/:id", v1.UpdateBase)
-				org.DELETE("/bases/:id", v1.DeleteBase)
-
-				// Factories
 				org.GET("/factories", v1.ListFactories)
-				org.POST("/factories", v1.CreateFactory)
-				org.PUT("/factories/:id", v1.UpdateFactory)
-				org.DELETE("/factories/:id", v1.DeleteFactory)
-
-				// Workshops
 				org.GET("/workshops", v1.ListWorkshops)
-				org.POST("/workshops", v1.CreateWorkshop)
-				org.PUT("/workshops/:id", v1.UpdateWorkshop)
-				org.DELETE("/workshops/:id", v1.DeleteWorkshop)
+
+				// Write operations (admin only - BFLA defense)
+				orgAdmin := org.Group("")
+				orgAdmin.Use(middleware.RequireRole("admin"))
+				{
+					orgAdmin.POST("/bases", v1.CreateBase)
+					orgAdmin.PUT("/bases/:id", v1.UpdateBase)
+					orgAdmin.DELETE("/bases/:id", v1.DeleteBase)
+					orgAdmin.POST("/factories", v1.CreateFactory)
+					orgAdmin.PUT("/factories/:id", v1.UpdateFactory)
+					orgAdmin.DELETE("/factories/:id", v1.DeleteFactory)
+					orgAdmin.POST("/workshops", v1.CreateWorkshop)
+					orgAdmin.PUT("/workshops/:id", v1.UpdateWorkshop)
+					orgAdmin.DELETE("/workshops/:id", v1.DeleteWorkshop)
+				}
 			}
 
 			// Equipment routes
@@ -501,20 +503,23 @@ func setupDatabaseRoutes(router *gin.Engine) {
 			{
 				equipment.GET("", v1.ListEquipment)
 				equipment.GET("/statistics", v1.GetEquipmentStatistics)
-
-				// Equipment types
 				equipment.GET("/types", v1.ListEquipmentTypes)
-				equipment.POST("/types", v1.CreateEquipmentType)
-
 				equipment.GET("/:id", v1.GetEquipment)
 				equipment.GET("/:id/qrcode", v1.GetEquipmentQRCode)
 				equipment.GET("/qr/:code", v1.GetEquipmentByQRCode)
-				equipment.POST("", v1.CreateEquipment)
-				equipment.PUT("/:id", v1.UpdateEquipment)
-				equipment.DELETE("/:id", v1.DeleteEquipment)
-				equipment.POST("/:id/scrap", v1.ScrapEquipment)
-				equipment.POST("/:id/seal", v1.SealEquipment)
-				equipment.POST("/:id/enable", v1.EnableEquipment)
+
+				// Write operations (admin, supervisor, engineer only - BFLA defense)
+				equipAdmin := equipment.Group("")
+				equipAdmin.Use(middleware.RequireRole("admin", "supervisor", "engineer"))
+				{
+					equipAdmin.POST("/types", v1.CreateEquipmentType)
+					equipAdmin.POST("", v1.CreateEquipment)
+					equipAdmin.PUT("/:id", v1.UpdateEquipment)
+					equipAdmin.DELETE("/:id", v1.DeleteEquipment)
+					equipAdmin.POST("/:id/scrap", v1.ScrapEquipment)
+					equipAdmin.POST("/:id/seal", v1.SealEquipment)
+					equipAdmin.POST("/:id/enable", v1.EnableEquipment)
+				}
 			}
 
 			// Inspection routes
@@ -522,13 +527,6 @@ func setupDatabaseRoutes(router *gin.Engine) {
 			{
 				inspection.GET("/templates", v1.ListInspectionTemplates)
 				inspection.GET("/templates/:id", v1.GetInspectionTemplate)
-				inspection.POST("/templates", v1.CreateInspectionTemplate)
-				inspection.PUT("/templates/:id", v1.UpdateInspectionTemplate)
-				inspection.DELETE("/templates/:id", v1.DeleteInspectionTemplate)
-				inspection.POST("/items", v1.CreateInspectionItem)
-				inspection.PUT("/items/:id", v1.UpdateInspectionItem)
-				inspection.DELETE("/items/:id", v1.DeleteInspectionItem)
-
 				inspection.GET("/tasks", v1.ListInspectionTasks)
 				inspection.GET("/tasks/:id", v1.GetInspectionTask)
 				inspection.GET("/my-tasks", v1.GetMyTasks)
@@ -536,6 +534,18 @@ func setupDatabaseRoutes(router *gin.Engine) {
 				inspection.POST("/start", v1.StartInspection)
 				inspection.POST("/complete", v1.CompleteInspection)
 				inspection.GET("/statistics", v1.GetInspectionStatistics)
+
+				// Template & Item modifications (admin & engineer only)
+				inspAdmin := inspection.Group("")
+				inspAdmin.Use(middleware.RequireRole("admin", "engineer"))
+				{
+					inspAdmin.POST("/templates", v1.CreateInspectionTemplate)
+					inspAdmin.PUT("/templates/:id", v1.UpdateInspectionTemplate)
+					inspAdmin.DELETE("/templates/:id", v1.DeleteInspectionTemplate)
+					inspAdmin.POST("/items", v1.CreateInspectionItem)
+					inspAdmin.PUT("/items/:id", v1.UpdateInspectionItem)
+					inspAdmin.DELETE("/items/:id", v1.DeleteInspectionItem)
+				}
 			}
 
 			// Repair routes

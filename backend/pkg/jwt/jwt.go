@@ -9,8 +9,9 @@ import (
 )
 
 type Claims struct {
-	UserID uint   `json:"user_id"`
-	Role   string `json:"role"`
+	UserID    uint   `json:"user_id"`
+	Role      string `json:"role"`
+	FactoryID *uint  `json:"factory_id,omitempty"`
 	jwt.RegisteredClaims
 }
 
@@ -19,11 +20,12 @@ var (
 	ErrTokenExpired = errors.New("token is expired")
 )
 
-func GenerateToken(userID uint, role string) (string, error) {
+func GenerateToken(userID uint, role string, factoryID *uint) (string, error) {
 	now := time.Now()
 	claims := Claims{
-		UserID: userID,
-		Role:   role,
+		UserID:    userID,
+		Role:      role,
+		FactoryID: factoryID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    config.Cfg.JWT.Issuer,
 			Subject:   "ems-auth",
@@ -66,5 +68,5 @@ func RefreshToken(tokenString string) (string, error) {
 		return "", errors.New("token does not need refresh")
 	}
 
-	return GenerateToken(claims.UserID, claims.Role)
+	return GenerateToken(claims.UserID, claims.Role, claims.FactoryID)
 }

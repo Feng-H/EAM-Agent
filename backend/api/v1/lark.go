@@ -142,14 +142,12 @@ func verifyLarkSignature(c *gin.Context, body []byte, encryptKey string) bool {
 	signature := c.GetHeader("X-Lark-Signature")
 
 	if encryptKey == "" {
-		if signature != "" {
-			fmt.Printf("[verifyLarkSignature] Warning: Received signature from Lark but Encrypt Key is NOT configured in EMS. Allowing request for now. Please configure Encrypt Key for security.\n")
-		}
-		return true
+		fmt.Printf("[verifyLarkSignature] Rejected: Encrypt Key is NOT configured in EMS. Rejecting unverified webhook request.\n")
+		return false
 	}
 
-	if signature == "" {
-		fmt.Printf("[verifyLarkSignature] Error: Missing signature from Lark but Encrypt Key IS configured in EMS.\n")
+	if signature == "" || timestamp == "" || nonce == "" {
+		fmt.Printf("[verifyLarkSignature] Error: Missing signature or timestamp/nonce headers from webhook.\n")
 		return false
 	}
 

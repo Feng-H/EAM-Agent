@@ -1,6 +1,7 @@
 package service
 
 import (
+	"time"
 	"fmt"
 	"io"
 	"os"
@@ -29,7 +30,9 @@ func (s *ManualService) UploadAndProcess(file io.Reader, filename string, title 
 		return nil, fmt.Errorf("failed to create directory: %v", err)
 	}
 	
-	filePath := filepath.Join(saveDir, fmt.Sprintf("%d_%s", os.Getpid(), filename))
+	cleanFilename := filepath.Base(filename)
+	cleanFilename = strings.ReplaceAll(cleanFilename, " ", "_")
+	filePath := filepath.Join(saveDir, fmt.Sprintf("%d_%s", time.Now().UnixNano(), cleanFilename))
 	dst, err := os.Create(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create file: %v", err)

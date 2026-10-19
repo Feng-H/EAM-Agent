@@ -6,6 +6,8 @@ import (
 
 	"github.com/ems/backend/internal/model"
 	"github.com/ems/backend/internal/repository"
+	"github.com/ems/backend/pkg/database"
+	"gorm.io/gorm"
 )
 
 // SparePartService
@@ -119,55 +121,57 @@ func (s *SparePartService) StockIn(partID, factoryID uint, quantity int, remark 
 }
 
 func (s *SparePartService) StockOut(partID, factoryID uint, quantity int, orderID, taskID *uint, remark string, userID uint) error {
+	if quantity <= 0 {
+		return errors.New("quantity must be greater than 0")
+	}
+
 	// Verify part exists
 	_, err := s.partRepo.GetByID(partID)
 	if err != nil {
 		return ErrNotFound
 	}
 
-	// Check stock
-	inv, err := s.inventoryRepo.GetByPartAndFactory(partID, factoryID)
-	if err != nil {
-		return errors.New("inventory not found")
-	}
+	db := database.GetDB()
+	return db.Transaction(func(tx *gorm.DB) error {
+		// 1. Atomic decrement with stock floor condition (no overselling)
+		res := tx.Model(&model.SparePartInventory{}).
+			Where("spare_part_id = ? AND factory_id = ? AND quantity >= ?", partID, factoryID, quantity).
+			Update("quantity", gorm.Expr("quantity - ?", quantity))
+		if res.Error != nil {
+			return res.Error
+		}
+		if res.RowsAffected == 0 {
+			return fmt.Errorf("insufficient stock: requested %d", quantity)
+		}
 
-	if inv.Quantity < quantity {
-		return fmt.Errorf("insufficient stock: available %d, requested %d", inv.Quantity, quantity)
-	}
+		// 2. Create consumption record within the same transaction
+		consumption := &model.SparePartConsumption{
+			SparePartID: partID,
+			OrderID:     orderID,
+			TaskID:      taskID,
+			Quantity:    quantity,
+			UserID:      userID,
+		}
+		if err := tx.Create(consumption).Error; err != nil {
+			return err
+		}
 
-	// Update inventory
-	if err := s.inventoryRepo.UpdateQuantity(partID, factoryID, -quantity); err != nil {
-		return err
-	}
+		// 3. Create transaction record within the same transaction
+		txRecord := &model.SparePartTransaction{
+			SparePartID: partID,
+			FactoryID:   factoryID,
+			Type:        "out",
+			Quantity:    -quantity,
+			OperatorID:  userID,
+			RelatedID:   orderID,
+			Remark:      remark,
+		}
+		if txRecord.RelatedID == nil {
+			txRecord.RelatedID = taskID
+		}
 
-	// Create consumption record
-	consumption := &model.SparePartConsumption{
-		SparePartID: partID,
-		OrderID:     orderID,
-		TaskID:      taskID,
-		Quantity:    quantity,
-		UserID:      userID,
-	}
-
-	if err := s.consumptionRepo.Create(consumption); err != nil {
-		return err
-	}
-
-	// Create transaction record
-	tx := &model.SparePartTransaction{
-		SparePartID: partID,
-		FactoryID:   factoryID,
-		Type:        "out",
-		Quantity:    -quantity,
-		OperatorID:  userID,
-		RelatedID:   orderID, // Prioritize order_id as related_id
-		Remark:      remark,
-	}
-	if tx.RelatedID == nil {
-		tx.RelatedID = taskID
-	}
-
-	return s.txRepo.Create(tx)
+		return tx.Create(txRecord).Error
+	})
 }
 
 func (s *SparePartService) GetInventory(filter repository.InventoryFilter) (*InventoryListResult, error) {

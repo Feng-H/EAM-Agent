@@ -19,7 +19,7 @@ func setupTestJWT() {
 func TestGenerateAndParseToken(t *testing.T) {
 	setupTestJWT()
 
-	tokenStr, err := GenerateToken(42, "admin")
+	tokenStr, err := GenerateToken(42, "admin", nil)
 	if err != nil {
 		t.Fatalf("GenerateToken failed: %v", err)
 	}
@@ -60,7 +60,7 @@ func TestParseToken_Expired(t *testing.T) {
 		},
 	}
 
-	tokenStr, err := GenerateToken(1, "operator")
+	tokenStr, err := GenerateToken(1, "operator", nil)
 	if err != nil {
 		t.Fatalf("GenerateToken failed: %v", err)
 	}
@@ -73,7 +73,7 @@ func TestParseToken_Expired(t *testing.T) {
 
 func TestParseToken_WrongSecret(t *testing.T) {
 	setupTestJWT()
-	tokenStr, _ := GenerateToken(1, "admin")
+	tokenStr, _ := GenerateToken(1, "admin", nil)
 
 	config.Cfg.JWT.Secret = "wrong-secret"
 	_, err := ParseToken(tokenStr)
@@ -84,7 +84,7 @@ func TestParseToken_WrongSecret(t *testing.T) {
 
 func TestRefreshToken_TooEarly(t *testing.T) {
 	setupTestJWT()
-	tokenStr, _ := GenerateToken(1, "admin")
+	tokenStr, _ := GenerateToken(1, "admin", nil)
 
 	_, err := RefreshToken(tokenStr)
 	if err == nil {
@@ -101,7 +101,7 @@ func TestRefreshToken_WithinWindow(t *testing.T) {
 		},
 	}
 	// Token expires in ~1 hour, which is within the 1-hour refresh window
-	tokenStr, _ := GenerateToken(1, "engineer")
+	tokenStr, _ := GenerateToken(1, "engineer", nil)
 
 	newToken, err := RefreshToken(tokenStr)
 	if err != nil {
@@ -128,7 +128,7 @@ func TestRefreshToken_ExpiredToken(t *testing.T) {
 			ExpireHours: -1,
 		},
 	}
-	tokenStr, _ := GenerateToken(1, "admin")
+	tokenStr, _ := GenerateToken(1, "admin", nil)
 
 	_, err := RefreshToken(tokenStr)
 	if err == nil {

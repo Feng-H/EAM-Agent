@@ -2,7 +2,9 @@ package v1
 
 import (
 	"net/http"
+	"path/filepath"
 	"strconv"
+	"strings"
 
 	agentRepo "github.com/ems/backend/internal/agent/repository"
 	"github.com/ems/backend/internal/service"
@@ -41,6 +43,19 @@ func UploadManual(c *gin.Context) {
 		return
 	}
 	defer file.Close()
+
+	// 1. File size limit (25MB)
+	if header.Size > 25*1024*1024 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "文件大小超出限制，最大允许 25MB"})
+		return
+	}
+
+	// 2. Extension check (PDF only)
+	ext := strings.ToLower(filepath.Ext(header.Filename))
+	if ext != ".pdf" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "仅支持上传 PDF 格式的技术手册"})
+		return
+	}
 
 	title := c.PostForm("title")
 	if title == "" {

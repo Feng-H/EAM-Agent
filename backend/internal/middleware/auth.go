@@ -1,4 +1,5 @@
 package middleware
+
 import (
 	"crypto/sha256"
 	"encoding/hex"
@@ -17,6 +18,7 @@ import (
 const (
 	ContextKeyUserID           = "user_id"
 	ContextKeyRole             = "role"
+	ContextKeyFactoryID        = "factory_id"
 	ContextKeyAPIKeyID         = "api_key_id"
 	ContextKeyAPIKeyScopes     = "api_key_scopes"
 	ContextKeyAPIKeyRateLimit  = "api_key_rate_limit"
@@ -57,6 +59,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 					c.Set(ContextKeyUserID, keyRecord.UserID)
 					c.Set(ContextKeyRole, string(keyRecord.User.Role))
+					c.Set(ContextKeyFactoryID, keyRecord.User.FactoryID)
 					c.Set(ContextKeyAPIKeyID, keyRecord.ID)
 					
 					scopes := strings.Split(keyRecord.Scopes, ",")
@@ -97,6 +100,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		c.Set(ContextKeyUserID, claims.UserID)
 		c.Set(ContextKeyRole, claims.Role)
+		c.Set(ContextKeyFactoryID, claims.FactoryID)
 		c.Next()
 	}
 }
@@ -148,6 +152,20 @@ func GetUserRole(c *gin.Context) (string, bool) {
 		return "", false
 	}
 	return roleStr, true
+}
+
+func GetFactoryID(c *gin.Context) (*uint, bool) {
+	fid, exists := c.Get(ContextKeyFactoryID)
+	if !exists || fid == nil {
+		return nil, false
+	}
+	if p, ok := fid.(*uint); ok {
+		return p, true
+	}
+	if u, ok := fid.(uint); ok {
+		return &u, true
+	}
+	return nil, false
 }
 
 func checkRateLimit(apiKeyID uint, limit int) bool {

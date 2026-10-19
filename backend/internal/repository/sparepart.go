@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"time"
 
 	"github.com/ems/backend/internal/model"
@@ -140,6 +141,19 @@ func (r *SparePartInventoryRepository) Upsert(partID, factoryID uint, quantity i
 	// Update existing
 	inv.Quantity = quantity
 	return r.db.Save(&inv).Error
+}
+
+func (r *SparePartInventoryRepository) DeductStockAtomic(partID, factoryID uint, quantity int) error {
+	res := r.db.Model(&model.SparePartInventory{}).
+		Where("spare_part_id = ? AND factory_id = ? AND quantity >= ?", partID, factoryID, quantity).
+		Update("quantity", gorm.Expr("quantity - ?", quantity))
+	if res.Error != nil {
+		return res.Error
+	}
+	if res.RowsAffected == 0 {
+		return errors.New("insufficient stock")
+	}
+	return nil
 }
 
 func (r *SparePartInventoryRepository) UpdateQuantity(partID, factoryID uint, delta int) error {

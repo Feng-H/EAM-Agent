@@ -98,7 +98,7 @@ type Equipment struct {
 	Name             string    `json:"name" gorm:"size:200;not null"`
 	Model            string    `json:"model" gorm:"size:100"`
 	Spec             string    `json:"spec" gorm:"size:255"`
-	Status           string    `json:"status" gorm:"size:20;default:'running'"`
+	Status           string    `json:"status" gorm:"size:20;default:'running';index"`
 	QRCode           string    `json:"qr_code" gorm:"size:100;uniqueIndex"`
 	
 	PurchasePrice    float64    `json:"purchase_price" gorm:"type:decimal(12,2);default:0"`
@@ -107,9 +107,9 @@ type Equipment struct {
 	ScrapValue       float64    `json:"scrap_value" gorm:"type:decimal(12,2);default:0"`
 	HourlyLoss       float64    `json:"hourly_loss" gorm:"type:decimal(10,2);default:0"`
 	
-	TypeID           uint           `json:"type_id"`
+	TypeID           uint           `json:"type_id" gorm:"index"`
 	Type             *EquipmentType `json:"type,omitempty" gorm:"foreignKey:TypeID"`
-	WorkshopID       uint           `json:"workshop_id"`
+	WorkshopID       uint           `json:"workshop_id" gorm:"index"`
 	Workshop         *Workshop      `json:"workshop,omitempty" gorm:"foreignKey:WorkshopID"`
 	
 	DedicatedMaintenanceID *uint `json:"dedicated_maintenance_id"`
@@ -147,14 +147,14 @@ const (
 
 type InspectionTask struct {
 	BaseModel
-	EquipmentID   uint                `json:"equipment_id" gorm:"not null"`
+	EquipmentID   uint                `json:"equipment_id" gorm:"not null;index"`
 	Equipment     *Equipment          `json:"equipment,omitempty" gorm:"foreignKey:EquipmentID"`
 	TemplateID    uint                `json:"template_id" gorm:"not null"`
 	Template      *InspectionTemplate `json:"template,omitempty" gorm:"foreignKey:TemplateID"`
-	AssignedTo    uint                `json:"assigned_to" gorm:"not null"`
+	AssignedTo    uint                `json:"assigned_to" gorm:"not null;index"`
 	Assignee      *User               `json:"assignee,omitempty" gorm:"foreignKey:AssignedTo"`
-	ScheduledDate time.Time           `json:"scheduled_date" gorm:"not null"`
-	Status        string              `json:"status" gorm:"size:20;default:'pending'"`
+	ScheduledDate time.Time           `json:"scheduled_date" gorm:"not null;index"`
+	Status        string              `json:"status" gorm:"size:20;default:'pending';index"`
 	StartedAt     *time.Time          `json:"started_at"`
 	CompletedAt   *time.Time          `json:"completed_at"`
 	Latitude      *float64            `json:"latitude" gorm:"type:decimal(10,8)"`
@@ -191,15 +191,15 @@ const (
 
 type RepairOrder struct {
 	BaseModel
-	EquipmentID      uint       `json:"equipment_id" gorm:"not null"`
+	EquipmentID      uint       `json:"equipment_id" gorm:"not null;index"`
 	Equipment        *Equipment `json:"equipment,omitempty" gorm:"foreignKey:EquipmentID"`
 	FaultDescription string     `json:"fault_description" gorm:"type:text;not null"`
 	FaultCode        string     `json:"fault_code" gorm:"size:50"`
 	Priority         int        `json:"priority" gorm:"default:3"`
-	Status           RepairStatus `json:"status" gorm:"size:20;default:'pending'"`
-	ReporterID       uint       `json:"reporter_id" gorm:"not null"`
+	Status           RepairStatus `json:"status" gorm:"size:20;default:'pending';index"`
+	ReporterID       uint       `json:"reporter_id" gorm:"not null;index"`
 	Reporter         *User      `json:"reporter,omitempty" gorm:"foreignKey:ReporterID"`
-	AssignedTo       *uint      `json:"assigned_to"`
+	AssignedTo       *uint      `json:"assigned_to" gorm:"index"`
 	Assignee         *User      `json:"assignee,omitempty" gorm:"foreignKey:AssignedTo"`
 	StartedAt        *time.Time `json:"started_at"`
 	CompletedAt      *time.Time `json:"completed_at"`
