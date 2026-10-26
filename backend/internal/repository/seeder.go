@@ -327,6 +327,8 @@ func findOrCreateUser(db *gorm.DB, username, passwordHash, name string, role mod
 			ApprovalStatus: model.ApprovalStatusApproved,
 		}
 		if err := db.Create(&user).Error; err != nil { return nil, err }
+	} else if passwordHash != "" && user.PasswordHash != passwordHash {
+		db.Model(&user).Update("password_hash", passwordHash)
 	}
 	return &user, nil
 }

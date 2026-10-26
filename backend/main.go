@@ -242,15 +242,21 @@ func setupMemoryRoutes(router *gin.Engine) {
 		protected := api.Group("")
 		protected.Use(middleware.AuthMiddleware())
 		{
-			// User management routes (admin only)
+			// User management routes
 			users := protected.Group("/users")
-			users.Use(middleware.RequireRole("admin"))
 			{
+				// Read operations (all authenticated users)
 				users.GET("", v1.GetUsersMemory)
-				users.POST("", v1.CreateUserMemory)
-				users.GET("/applications", v1.GetPendingApplicationsMemory)
-				users.PUT("/:id", v1.UpdateUserMemory)
-				users.PUT("/:id/approve", v1.ApproveApplicationMemory)
+
+				// Admin operations
+				usersAdmin := users.Group("")
+				usersAdmin.Use(middleware.RequireRole("admin"))
+				{
+					usersAdmin.POST("", v1.CreateUserMemory)
+					usersAdmin.GET("/applications", v1.GetPendingApplicationsMemory)
+					usersAdmin.PUT("/:id", v1.UpdateUserMemory)
+					usersAdmin.PUT("/:id/approve", v1.ApproveApplicationMemory)
+				}
 			}
 
 			// Organization routes
@@ -463,15 +469,21 @@ func setupDatabaseRoutes(router *gin.Engine) {
 		protected := api.Group("")
 		protected.Use(middleware.AuthMiddleware())
 		{
-			// User management routes (admin only)
+			// User management routes
 			users := protected.Group("/users")
-			users.Use(middleware.RequireRole("admin"))
 			{
+				// Read operations (all authenticated users)
 				users.GET("", v1.GetUsers)
-				users.POST("", v1.CreateUser)
-				users.GET("/applications", v1.GetPendingApplications)
-				users.PUT("/:id", v1.UpdateUser)
-				users.PUT("/:id/approve", v1.ApproveApplication)
+
+				// Admin operations
+				usersAdmin := users.Group("")
+				usersAdmin.Use(middleware.RequireRole("admin"))
+				{
+					usersAdmin.POST("", v1.CreateUser)
+					usersAdmin.GET("/applications", v1.GetPendingApplications)
+					usersAdmin.PUT("/:id", v1.UpdateUser)
+					usersAdmin.PUT("/:id/approve", v1.ApproveApplication)
+				}
 			}
 
 			// Organization routes

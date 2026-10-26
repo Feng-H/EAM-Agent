@@ -122,7 +122,7 @@
               详情
             </el-button>
             <el-button
-              v-if="row.status === 'pending'"
+              v-if="canAssign && row.status === 'pending'"
               type="warning"
               size="small"
               link
@@ -310,12 +310,15 @@ import {
   type AssignRepairRequest
 } from '@/api/repair'
 import { userApi } from '@/api/user'
+import { useAuthStore } from '@/stores/auth'
 import RepairReportDialog from './components/RepairReportDialog.vue'
 import RepairExecuteDialog from './components/RepairExecuteDialog.vue'
 import RepairAuditDialog from './components/RepairAuditDialog.vue'
 import RepairToKnowledgeDialog from './components/RepairToKnowledgeDialog.vue'
 
 const router = useRouter()
+const authStore = useAuthStore()
+const canAssign = computed(() => authStore.hasRole('admin', 'supervisor', 'engineer'))
 
 const loading = ref(false)
 const orders = ref<RepairOrder[]>([])
@@ -433,6 +436,9 @@ const viewDetail = async (order: RepairOrder) => {
 const openAssignDialog = (order: RepairOrder) => {
   currentOrder.value = order
   assignForm.assign_to = undefined as unknown as number
+  if (technicians.value.length === 0) {
+    loadTechnicians()
+  }
   assignDialogVisible.value = true
 }
 
@@ -473,7 +479,6 @@ const confirmAssign = async () => {
 onMounted(() => {
   loadOrders()
   loadStatistics()
-  loadTechnicians()
 })
 </script>
 
