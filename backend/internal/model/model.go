@@ -2,6 +2,7 @@ package model
 
 import (
 	"time"
+	"github.com/lib/pq"
 
 	"gorm.io/gorm"
 )
@@ -170,7 +171,7 @@ type InspectionRecord struct {
 	Result   string          `json:"result" gorm:"size:20;not null"`
 	Remark   string          `json:"remark" gorm:"type:text"`
 	PhotoURL string          `json:"photo_url" gorm:"size:500"`
-	Images   []string        `json:"images" gorm:"type:text[]"`
+	Images   pq.StringArray  `json:"images" gorm:"type:text[]"`
 }
 
 // =====================================================
@@ -207,7 +208,7 @@ type RepairOrder struct {
 	AuditedAt        *time.Time `json:"audited_at"`
 	ClosedAt         *time.Time `json:"closed_at"`
 	Solution         string     `json:"solution" gorm:"type:text"`
-	Photos           []string   `json:"photos" gorm:"type:text[]"`
+	Photos           pq.StringArray   `json:"photos" gorm:"type:text[]"`
 	Logs             []RepairLog `json:"logs,omitempty" gorm:"foreignKey:OrderID"`
 	CostDetail       *RepairCostDetail `json:"cost_detail,omitempty" gorm:"foreignKey:OrderID"`
 }
@@ -365,7 +366,7 @@ type KnowledgeArticle struct {
 	Solution        string         `json:"solution" gorm:"type:text"`
 	SourceType      string         `json:"source_type" gorm:"size:50"`
 	SourceID        *uint          `json:"source_id"`
-	Tags            []string       `json:"tags" gorm:"type:text[]"`
+	Tags            pq.StringArray       `json:"tags" gorm:"type:text[]"`
 	CreatedBy       uint           `json:"created_by" gorm:"not null"`
 	Creator         User           `json:"creator,omitempty" gorm:"foreignKey:CreatedBy"`
 }

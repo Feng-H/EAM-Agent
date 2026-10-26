@@ -259,7 +259,7 @@ func (s *RepairOrderService) UpdateRepair(orderID uint, userID uint, req *Update
 			logContent = "等待报修人确认"
 			statusChanged = true
 		}
-	case "confirmed":
+	case "confirmed", "completed":
 		if order.Status == model.RepairInProgress || order.Status == model.RepairTesting {
 			now := time.Now()
 			newStatus = model.RepairConfirmed

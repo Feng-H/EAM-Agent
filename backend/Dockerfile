@@ -22,7 +22,8 @@ RUN go mod download
 COPY . .
 
 # Add missing dependency and tidy mod file
-RUN go get github.com/ledongthuc/pdf && go mod tidy
+# Ensure modules are tidy
+RUN go mod tidy
 
 # Build the application
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ems-api ./main.go
