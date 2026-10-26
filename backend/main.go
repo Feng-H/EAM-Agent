@@ -439,6 +439,7 @@ func setupMemoryRoutes(router *gin.Engine) {
 
 	// Health check
 	router.GET("/health", v1.HealthCheckMemory)
+	router.HEAD("/health", v1.HealthCheckMemory)
 
 	// Lark webhook (public)
 	router.POST("/api/v1/lark/webhook", v1.LarkWebhook)
@@ -681,10 +682,12 @@ func setupDatabaseRoutes(router *gin.Engine) {
 	// Swagger documentation
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Health check
-	router.GET("/health", func(c *gin.Context) {
+	// Health check (support GET and HEAD for Docker healthchecks)
+	healthHandler := func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok", "service": "ems-api"})
-	})
+	}
+	router.GET("/health", healthHandler)
+	router.HEAD("/health", healthHandler)
 
 	// Lark webhook (public)
 	router.POST("/api/v1/lark/webhook", v1.LarkWebhook)
