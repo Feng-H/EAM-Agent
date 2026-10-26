@@ -70,6 +70,9 @@ func (a *RepairAuditAnalyzer) Analyze(req *dto.RepairAuditRequest, user model.Us
 			for j := i + 1; j < len(oList); j++ {
 				// If two orders on same equipment within 72 hours
 				diff := oList[i].CreatedAt.Sub(oList[j].CreatedAt)
+				if diff < 0 {
+					diff = -diff
+				}
 				if diff > 0 && diff < 72*time.Hour {
 					// Check if descriptions are similar (simple keyword check)
 					if a.isSimilar(oList[i].FaultDescription, oList[j].FaultDescription) {
