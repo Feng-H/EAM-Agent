@@ -1,7 +1,33 @@
-# CLAUDE.md
+# AGENTS.md & CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides mandatory guidance and engineering discipline for AI agents (Hermes, Claude Code, Codex, Cursor) working with code in this repository.
 
+## 🛡️ Engineering Discipline & Quality Gates (pstack Methodology)
+
+All AI agents (Hermes, Claude Code, Codex, Cursor) modifying this repository MUST strictly follow these three non-negotiable engineering gates before declaring any task complete:
+
+### Gate 1: Evidence-First Forensics (取证先行)
+- **Never guess or touch code prematurely**: Do not modify application code until the issue is positively isolated with runtime evidence (log output, reproducible failing test case, or direct DB query).
+- **Isolate before fixing**: Clearly identify root cause vs superficial symptoms. For Bug fixes, write a reproduction test or trace script first.
+
+### Gate 2: Minimal LOC & Blast-Radius Control (极简变更与影响面收敛)
+- **Surgical precision over broad rewrites**: Solve problems with the minimum necessary lines of code (Minimal LOC).
+- **No speculative refactoring**: Do NOT refactor unrelated files, do NOT arbitrarily introduce new npm/Go dependencies, and do NOT alter working architecture under the guise of 'cleanup'.
+- **Backward compatibility**: Any change to DB schema or API routes must preserve existing 5-level RBAC and 7-state repair workflow contracts.
+
+### Gate 3: Dual-Stack Verification Gate (双端闭环硬核验证)
+Before reporting completion or opening a PR, the agent MUST run and provide the real terminal command output showing exit code 0:
+1. **Backend Verification**:
+   ```bash
+   cd backend && go test ./... -v
+   ```
+2. **Frontend Type-Safety & Build**:
+   ```bash
+   cd frontend && npm run type-check && npm run build
+   ```
+*If a test fails or build produces type errors, the work is NOT done. Never submit an untested assumption.*
+
+---
 ## Project Overview
 
 EMS (Equipment Management System) is a unified equipment management platform for group factories. The system manages approximately 50,000 devices across 10+ bases, 40+ factories, and 100+ workshops, serving 10,000+ users. Current version: v1.0 (stable release).
