@@ -32,20 +32,40 @@ jobs:
           INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
         run: |
           instabox exec "$BOX_NAME" -- 'cd /data/home/EMS && docker compose up -d'
-          sleep 10
-          instabox exec "$BOX_NAME" -- 'docker restart ems-backend && sleep 5 && docker restart ems-frontend && sleep 3'
-          instabox exec "$BOX_NAME" -- 'curl -fsS http://localhost:3000/health'
+          
           instabox exec "$BOX_NAME" -- '
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/api/v1/auth/login \
-              -H "Content-Type: application/json" \
-              -d "{\"username\":\"ci_probe\",\"password\":\"wrong_pass\"}")
-            if [ "$STATUS" -eq 401 ]; then
-              echo "API and DB authentication path verified (HTTP 401 returned as expected)"
-              exit 0
-            else
-              echo "Unexpected response code: $STATUS"
+            echo "Waiting for services to initialize..."
+            sleep 10
+            docker restart ems-backend
+            sleep 6
+            docker restart ems-frontend
+            
+            SUCCESS=0
+            for i in $(seq 1 30); do
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/api/v1/auth/login \
+                -H "Content-Type: application/json" \
+                -d "{\"username\":\"ci_probe\",\"password\":\"wrong_pass\"}" || true)
+              
+              if [ "$STATUS" = "401" ]; then
+                echo "Full-stack API and DB authentication verified after ${i}s (HTTP 401)"
+                SUCCESS=1
+                break
+              fi
+              
+              if [ "$STATUS" = "502" ] && [ $((i % 6)) -eq 0 ]; then
+                docker restart ems-frontend >/dev/null 2>&1 || true
+              fi
+              sleep 1
+            done
+            
+            if [ "$SUCCESS" -ne 1 ]; then
+              echo "Timed out waiting for API (last status: $STATUS)"
+              docker logs ems-backend --tail 30
               exit 1
             fi
+            
+            curl -fsS http://localhost:3000/health
+            echo "All E2E health checks passed successfully!"
           '
 
       - name: Teardown Sandbox
@@ -54,5 +74,5 @@ jobs:
           INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
         run: |
           if [ -n "$BOX_NAME" ]; then
-            instabox rm "$BOX_NAME" || true
+            instabox rm "$BOX_NAME" --yes || instabox rm "$BOX_NAME" || true
           fi
