@@ -307,7 +307,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { Plus, DocumentCopy } from '@element-plus/icons-vue'
 import { agentApi } from '@/api/agent'
