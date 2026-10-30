@@ -1,83 +1,86 @@
 <template>
-  <div class="organization">
-    <el-row :gutter="20">
-      <!-- Bases -->
-      <el-col :span="8">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <span>基地列表</span>
-              <el-button type="primary" size="small" @click="showBaseDialog = true">
-                <el-icon><Plus /></el-icon>
-                新增
-              </el-button>
-            </div>
-          </template>
-          <el-table :data="bases" border max-height="400">
-            <el-table-column prop="code" label="编号" width="100" />
-            <el-table-column prop="name" label="名称" />
-            <el-table-column label="操作" width="120" align="center">
-              <template #default="{ row }">
-                <el-button size="small" text type="primary" @click="editBase(row)">编辑</el-button>
-                <el-button size="small" text type="danger" @click="deleteBase(row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
+  <div class="organization-view">
+    <el-card class="org-main-card" shadow="never">
+      <template #header>
+        <div class="org-header-flex">
+          <div>
+            <h3 class="org-title">组织架构与制造层级</h3>
+            <span class="org-subtitle">统一管理集团基地 (HQ)、制造工厂 (Factory) 与作业车间 (Workshop)</span>
+          </div>
+          <div>
+            <el-button v-if="activeTab === 'bases'" type="primary" size="small" @click="showBaseDialog = true">
+              <el-icon><Plus /></el-icon> 新增集团基地
+            </el-button>
+            <el-button v-else-if="activeTab === 'factories'" type="primary" size="small" @click="showFactoryDialog = true">
+              <el-icon><Plus /></el-icon> 新增制造工厂
+            </el-button>
+            <el-button v-else type="primary" size="small" @click="showWorkshopDialog = true">
+              <el-icon><Plus /></el-icon> 新增作业车间
+            </el-button>
+          </div>
+        </div>
+      </template>
 
-      <!-- Factories -->
-      <el-col :span="8">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <span>工厂列表</span>
-              <el-button type="primary" size="small" @click="showFactoryDialog = true">
-                <el-icon><Plus /></el-icon>
-                新增
-              </el-button>
-            </div>
-          </template>
-          <el-table :data="factories" border max-height="400">
-            <el-table-column prop="code" label="编号" width="100" />
-            <el-table-column prop="name" label="名称" />
-            <el-table-column prop="base_name" label="所属基地" />
-            <el-table-column label="操作" width="120" align="center">
-              <template #default="{ row }">
-                <el-button size="small" text type="primary" @click="editFactory(row)">编辑</el-button>
-                <el-button size="small" text type="danger" @click="deleteFactory(row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
+      <el-tabs v-model="activeTab" class="org-tabs">
+        <!-- 基地 Tab -->
+        <el-tab-pane :label="'集团基地 (' + bases.length + ')'" name="bases">
+          <div class="tab-pane-content">
+            <el-table :data="bases" border stripe style="width: 100%">
+              <el-table-column prop="code" label="基地编号" width="160" />
+              <el-table-column prop="name" label="基地名称" min-width="200" />
+              <el-table-column label="操作" width="160" align="center" fixed="right">
+                <template #default="{ row }">
+                  <el-button size="small" link type="primary" @click="editBase(row)">编辑</el-button>
+                  <el-button size="small" link type="danger" @click="deleteBase(row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
 
-      <!-- Workshops -->
-      <el-col :span="8">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <span>车间列表</span>
-              <el-button type="primary" size="small" @click="showWorkshopDialog = true">
-                <el-icon><Plus /></el-icon>
-                新增
-              </el-button>
-            </div>
-          </template>
-          <el-table :data="workshops" border max-height="400">
-            <el-table-column prop="code" label="编号" width="100" />
-            <el-table-column prop="name" label="名称" />
-            <el-table-column prop="factory_name" label="所属工厂" />
-            <el-table-column label="操作" width="120" align="center">
-              <template #default="{ row }">
-                <el-button size="small" text type="primary" @click="editWorkshop(row)">编辑</el-button>
-                <el-button size="small" text type="danger" @click="deleteWorkshop(row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
-    </el-row>
+        <!-- 工厂 Tab -->
+        <el-tab-pane :label="'制造工厂 (' + factories.length + ')'" name="factories">
+          <div class="tab-pane-content">
+            <el-table :data="factories" border stripe style="width: 100%">
+              <el-table-column prop="code" label="工厂编号" width="160" />
+              <el-table-column prop="name" label="工厂名称" min-width="200" />
+              <el-table-column prop="base_name" label="归属集团基地" min-width="180">
+                <template #default="{ row }">
+                  <el-tag size="small" type="info">{{ row.base_name || '未关联' }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="160" align="center" fixed="right">
+                <template #default="{ row }">
+                  <el-button size="small" link type="primary" @click="editFactory(row)">编辑</el-button>
+                  <el-button size="small" link type="danger" @click="deleteFactory(row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
+
+        <!-- 车间 Tab -->
+        <el-tab-pane :label="'作业车间 (' + workshops.length + ')'" name="workshops">
+          <div class="tab-pane-content">
+            <el-table :data="workshops" border stripe style="width: 100%">
+              <el-table-column prop="code" label="车间编号" width="160" />
+              <el-table-column prop="name" label="车间名称" min-width="200" />
+              <el-table-column prop="factory_name" label="归属工厂" min-width="180">
+                <template #default="{ row }">
+                  <el-tag size="small" type="success">{{ row.factory_name || '未关联' }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="160" align="center" fixed="right">
+                <template #default="{ row }">
+                  <el-button size="small" link type="primary" @click="editWorkshop(row)">编辑</el-button>
+                  <el-button size="small" link type="danger" @click="deleteWorkshop(row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </el-card>
 
     <!-- Base Dialog -->
     <el-dialog v-model="showBaseDialog" :title="editingBase ? '编辑基地' : '新增基地'" width="500px">
@@ -144,6 +147,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { orgApi, type Base, type Factory, type Workshop } from '@/api/equipment'
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus'
 
+const activeTab = ref('bases')
 const bases = ref<Base[]>([])
 const factories = ref<Factory[]>([])
 const workshops = ref<Workshop[]>([])
@@ -395,5 +399,42 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+</style>
+
+<style scoped>
+.organization-view {
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.org-main-card {
+  border-radius: 18px !important;
+  background: var(--color-bg-card) !important;
+  border: 1px solid var(--color-border) !important;
+  min-height: 600px;
+}
+
+.org-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.org-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.org-subtitle {
+  font-size: 12.5px;
+  color: var(--color-text-tertiary);
+}
+
+.tab-pane-content {
+  padding-top: 10px;
 }
 </style>

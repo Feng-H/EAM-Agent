@@ -1,76 +1,95 @@
 <template>
   <div class="template-view">
-    <el-row :gutter="20">
-      <!-- 模板列表 -->
-      <el-col :span="8">
-        <el-card class="template-list-card">
+    <el-row :gutter="24">
+      <!-- 模板列表 (左栏 38% 舒适宽度) -->
+      <el-col :span="10">
+        <el-card class="template-list-card" shadow="never">
           <template #header>
-            <div class="card-header">
-              <span>点检模板</span>
+            <div class="card-header-flex">
+              <div>
+                <h3 class="panel-main-title">点检模板库</h3>
+                <span class="panel-sub-title">共 {{ templates.length }} 个标准模板</span>
+              </div>
               <el-button type="primary" size="small" @click="showCreateDialog = true">
-                <el-icon><Plus /></el-icon>
-                新建模板
+                <el-icon><Plus /></el-icon> 新建模板
               </el-button>
             </div>
           </template>
 
-          <el-table
-            :data="templates"
-            @row-click="selectTemplate"
-            highlight-current-row
-            v-loading="loading"
-          >
-            <el-table-column prop="name" label="模板名称" />
-            <el-table-column prop="equipment_type_name" label="设备类型" width="100" />
-            <el-table-column prop="item_count" label="项目数" width="60" align="center" />
-            <el-table-column label="操作" width="80" align="center">
-              <template #default="{ row }">
-                <el-button
-                  type="danger"
-                  size="small"
-                  link
-                  @click.stop="deleteTemplate(row)"
-                >
-                  删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+          <div class="template-items-stream" v-loading="loading">
+            <div
+              v-for="tpl in templates"
+              :key="tpl.id"
+              class="tpl-card-item"
+              :class="{ active: currentTemplate && currentTemplate.id === tpl.id }"
+              @click="selectTemplate(tpl)"
+            >
+              <div class="tpl-item-main">
+                <div class="tpl-name-row">
+                  <span class="tpl-title">{{ tpl.name }}</span>
+                  <el-tag size="small" type="primary" effect="plain" round>{{ tpl.equipment_type_name || '通用' }}</el-tag>
+                </div>
+                <div class="tpl-meta-row">
+                  <span class="tpl-count">
+                    <el-icon style="margin-right: 3px"><Document /></el-icon>
+                    {{ tpl.item_count || 0 }} 个点检项
+                  </span>
+                  <el-button
+                    type="danger"
+                    size="small"
+                    link
+                    class="tpl-del-btn"
+                    @click.stop="deleteTemplate(tpl)"
+                  >
+                    删除
+                  </el-button>
+                </div>
+              </div>
+            </div>
+            <div v-if="templates.length === 0 && !loading" class="empty-list-hint">
+              暂无点检模板，点击右上角新建
+            </div>
+          </div>
         </el-card>
       </el-col>
 
-      <!-- 模板详情 -->
-      <el-col :span="16">
-        <el-card class="template-detail-card" v-if="currentTemplate">
+      <!-- 模板详情 (右栏 62% 沉浸大卡片) -->
+      <el-col :span="14">
+        <el-card class="template-detail-card" shadow="never">
           <template #header>
-            <div class="card-header">
-              <span>{{ currentTemplate.name }} - 点检项目</span>
+            <div class="card-header-flex" v-if="currentTemplate">
+              <div>
+                <h3 class="panel-main-title">{{ currentTemplate.name }}</h3>
+                <span class="panel-sub-title">适用类别：{{ currentTemplate.equipment_type_name || '所有设备' }}</span>
+              </div>
               <el-button type="primary" size="small" @click="showAddItemDialog = true">
-                <el-icon><Plus /></el-icon>
-                添加项目
+                <el-icon><Plus /></el-icon> 添加点检项
               </el-button>
+            </div>
+            <div class="card-header-flex" v-else>
+              <h3 class="panel-main-title">模板配置详情</h3>
             </div>
           </template>
 
-          <el-table :data="templateItems" v-loading="itemsLoading">
-            <el-table-column prop="sequence_order" label="序号" width="60" align="center" />
-            <el-table-column prop="name" label="项目名称" />
-            <el-table-column prop="method" label="检查方法" />
-            <el-table-column prop="criteria" label="判定标准" />
-            <el-table-column label="操作" width="100" align="center">
-              <template #default="{ row }">
-                <el-button type="primary" size="small" link @click="editItem(row)">
-                  编辑
-                </el-button>
-                <el-button type="danger" size="small" link @click="deleteItem(row)">
-                  删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
+          <div v-if="currentTemplate">
+            <el-table :data="templateItems" v-loading="itemsLoading" border stripe style="width: 100%">
+              <el-table-column prop="sequence_order" label="顺序" width="65" align="center" />
+              <el-table-column prop="name" label="检查项目" min-width="120" show-overflow-tooltip />
+              <el-table-column prop="method" label="检查方法" min-width="120" show-overflow-tooltip />
+              <el-table-column prop="criteria" label="判定基准" min-width="130" show-overflow-tooltip />
+              <el-table-column label="操作" width="120" align="center" fixed="right">
+                <template #default="{ row }">
+                  <el-button type="primary" size="small" link @click="editItem(row)">编辑</el-button>
+                  <el-button type="danger" size="small" link @click="deleteItem(row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
 
-        <el-empty v-else description="请选择一个模板查看详情" />
+          <div v-else class="empty-detail-state">
+            <el-empty description="请从左侧列表选择一个模板查看或配置点检项目" />
+          </div>
+        </el-card>
       </el-col>
     </el-row>
 
@@ -390,5 +409,102 @@ onMounted(() => {
 
 :deep(.el-table__row) {
   cursor: pointer;
+}
+</style>
+
+<style scoped>
+.template-view {
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.template-list-card,
+.template-detail-card {
+  border-radius: 18px !important;
+  background: var(--color-bg-card) !important;
+  border: 1px solid var(--color-border) !important;
+  min-height: 600px;
+}
+
+.card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-main-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.panel-sub-title {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+
+.template-items-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tpl-card-item {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpl-card-item:hover {
+  background: var(--color-bg-tertiary);
+  transform: translateY(-1px);
+}
+
+.tpl-card-item.active {
+  background: rgba(10, 124, 255, 0.08);
+  border-color: #0a7cff;
+  box-shadow: 0 0 0 1px #0a7cff;
+}
+
+.tpl-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.tpl-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.tpl-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+
+.tpl-count {
+  display: inline-flex;
+  align-items: center;
+}
+
+.empty-detail-state {
+  padding: 80px 0;
+}
+
+.empty-list-hint {
+  text-align: center;
+  padding: 40px 0;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
 }
 </style>
