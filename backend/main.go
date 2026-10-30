@@ -430,6 +430,16 @@ func setupMemoryRoutes(router *gin.Engine) {
 				// Tool Discovery (P2)
 				agent.GET("/tools", agentCtrl.ListTools)
 				agent.POST("/tools/call", agentCtrl.CallTool)
+
+				// Native MCP SSE Endpoints
+				agent.GET("/mcp/sse", agentCtrl.MCPSSEHandler)
+				agent.POST("/mcp/message", agentCtrl.MCPMessageHandler)
+			}
+
+			mcp := protected.Group("/mcp")
+			{
+				mcp.GET("/sse", agentCtrl.MCPSSEHandler)
+				mcp.POST("/message", agentCtrl.MCPMessageHandler)
 			}
 		}
 	}
@@ -675,6 +685,16 @@ func setupDatabaseRoutes(router *gin.Engine) {
 				// Tool Discovery (P2)
 				agent.GET("/tools", agentCtrl.ListTools)
 				agent.POST("/tools/call", agentCtrl.CallTool)
+
+				// Native MCP SSE Endpoints
+				agent.GET("/mcp/sse", agentCtrl.MCPSSEHandler)
+				agent.POST("/mcp/message", agentCtrl.MCPMessageHandler)
+			}
+
+			mcp := protected.Group("/mcp")
+			{
+				mcp.GET("/sse", agentCtrl.MCPSSEHandler)
+				mcp.POST("/message", agentCtrl.MCPMessageHandler)
 			}
 		}
 	}

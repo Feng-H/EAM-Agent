@@ -85,6 +85,61 @@
           </div>
         </el-tab-pane>
 
+        <!-- MCP Protocol Tab -->
+        <el-tab-pane label="MCP 协议接入" name="mcp">
+          <div class="tab-content">
+            <el-alert
+              title="EAM-Agent 原生支持 Anthropic Model Context Protocol (MCP)。可直接与 Claude Desktop、Cursor、Cline 等 AI 宿主无缝直连。"
+              type="success"
+              show-icon
+              style="margin-bottom: 20px"
+            />
+            
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-card shadow="hover">
+                  <template #header>
+                    <div class="card-header">
+                      <span>方式一：Claude Desktop 客户端配置 (stdio)</span>
+                    </div>
+                  </template>
+                  <p class="form-tip">在 <code>claude_desktop_config.json</code> 中配置 stdio 桥接：</p>
+                  <div class="schema-preview">
+                    <pre><code>{
+  "mcpServers": {
+    "eam-agent": {
+      "command": "/绝对路径/EAM-Agent/backend/bin/eam-mcp",
+      "env": {
+        "EAM_BASE_URL": "{{ originUrl }}",
+        "EAM_TOKEN": "在此填入您的 API 密钥"
+      }
+    }
+  }
+}</code></pre>
+                  </div>
+                </el-card>
+              </el-col>
+              <el-col :span="12">
+                <el-card shadow="hover">
+                  <template #header>
+                    <div class="card-header">
+                      <span>方式二：原生 SSE 云端直连 (Cursor / Web)</span>
+                    </div>
+                  </template>
+                  <p class="form-tip">直接配置标准 SSE 端点（无需本地执行文件）：</p>
+                  <div class="schema-preview">
+                    <pre><code>端点 URL:
+{{ originUrl }}/api/v1/mcp/sse
+
+请求头认证:
+Authorization: Bearer 您的_API_密钥</code></pre>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+          </div>
+        </el-tab-pane>
+
         <!-- Proactive Push Tab -->
         <el-tab-pane label="主动推送配置" name="push">
           <div class="tab-content">
@@ -156,6 +211,7 @@
             <el-option label="读取预测分析 (read:prediction)" value="read:prediction" />
             <el-option label="读取备件库存 (read:sparepart)" value="read:sparepart" />
             <el-option label="创建维修工单 (write:repair)" value="write:repair" />
+            <el-option label="读取排故知识库 (read:knowledge)" value="read:knowledge" />
           </el-select>
         </el-form-item>
         <el-form-item label="频率限制" prop="rate_limit">
@@ -222,6 +278,7 @@ import { agentApi } from '@/api/agent'
 
 // Tab state
 const activeTab = ref('apikeys')
+const originUrl = computed(() => (typeof window !== 'undefined' ? window.location.origin : 'https://eam.example.com'))
 
 // Data formatters
 const formatDate = (dateStr: string) => {

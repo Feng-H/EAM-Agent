@@ -34,6 +34,15 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 1. Try API Key first (for external Agents)
 		apiKey := c.GetHeader("X-API-KEY")
+		if apiKey == "" {
+			authHeader := c.GetHeader("Authorization")
+			if strings.HasPrefix(authHeader, "Bearer ") {
+				tokenCandidate := strings.TrimSpace(strings.TrimPrefix(authHeader, "Bearer "))
+				if strings.HasPrefix(tokenCandidate, "ems_") || strings.HasPrefix(tokenCandidate, "eam_") {
+					apiKey = tokenCandidate
+				}
+			}
+		}
 		if apiKey != "" {
 			// Hash incoming key for comparison
 			hash := sha256.Sum256([]byte(apiKey))

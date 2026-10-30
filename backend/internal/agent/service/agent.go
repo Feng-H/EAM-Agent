@@ -249,6 +249,29 @@ func (s *AgentService) initToolRegistry() {
 		},
 	}, s.handleGetRepairCosts, []string{"read:repair"}, true)
 
+	// Register update_repair_progress
+	s.toolRegistry.Register("update_repair_progress", dto.ToolDefinition{
+		Name: "update_repair_progress", Description: "Record troubleshooting notes, repair progress or actions taken on a repair order",
+		InputSchema: map[string]interface{}{
+			"type": "object", "properties": map[string]interface{}{
+				"order_id":      map[string]interface{}{"type": "integer", "description": "Repair order ID"},
+				"progress_note": map[string]interface{}{"type": "string", "description": "Actions taken, inspection findings, or troubleshooting details"},
+			}, "required": []string{"order_id", "progress_note"},
+		},
+	}, s.handleUpdateRepairProgress, []string{"write:repair"}, false)
+
+	// Register close_repair_order
+	s.toolRegistry.Register("close_repair_order", dto.ToolDefinition{
+		Name: "close_repair_order", Description: "Close a repair order after fault resolution with root cause and solution summary",
+		InputSchema: map[string]interface{}{
+			"type": "object", "properties": map[string]interface{}{
+				"order_id":     map[string]interface{}{"type": "integer", "description": "Repair order ID"},
+				"solution":     map[string]interface{}{"type": "string", "description": "Final solution description and outcome"},
+				"fault_reason": map[string]interface{}{"type": "string", "description": "Identified root cause of the fault"},
+			}, "required": []string{"order_id", "solution"},
+		},
+	}, s.handleCloseRepairOrder, []string{"write:repair"}, false)
+
 	// Register sql_data_analyst
 	s.toolRegistry.Register("sql_data_analyst", dto.ToolDefinition{
 		Name: "sql_data_analyst",
@@ -1487,4 +1510,100 @@ func (s *AgentService) asyncExtractSkill(history []model.AgentMessage, convID ui
 		skill.CreatedBy = fmt.Sprintf("agent:conv_%d", convID)
 		_ = s.repo.CreateSkill(skill)
 	}
+}
+
+
+func (s *AgentService) handleUpdateRepairProgress(user model.User, args map[string]interface{}) (interface{}, error) {
+	var orderID uint
+	if v, ok := args["order_id"].(float64); ok {
+		orderID = uint(v)
+	} else if v, ok := args["order_id"].(int); ok {
+		orderID = uint(v)
+	}
+	note, _ := args["progress_note"].(string)
+	if orderID == 0 || strings.TrimSpace(note) == "" {
+		return nil, fmt.Errorf("order_id and progress_note are required")
+	}
+
+	db := database.GetDB()
+	var order model.RepairOrder
+	if err := db.Preload("Equipment.Workshop").First(&order, orderID).Error; err != nil {
+		return nil, fmt.Errorf("repair order #%d not found", orderID)
+	}
+
+	if user.Role != "admin" && user.FactoryID != nil {
+		if order.Equipment == nil || order.Equipment.Workshop == nil || order.Equipment.Workshop.FactoryID != *user.FactoryID {
+			return nil, fmt.Errorf("permission denied: repair order belongs to another factory")
+		}
+	}
+
+	logEntry := model.RepairLog{
+		OrderID: orderID,
+		UserID:  user.ID,
+		Action:  "agent_progress_update",
+		Content: note,
+	}
+	if err := db.Create(&logEntry).Error; err != nil {
+		return nil, fmt.Errorf("failed to append repair log: %w", err)
+	}
+
+	if order.Status == model.RepairPending || order.Status == model.RepairAssigned {
+		now := time.Now()
+		db.Model(&order).Updates(map[string]interface{}{
+			"status":     model.RepairInProgress,
+			"started_at": &now,
+		})
+	}
+
+	return fmt.Sprintf("Progress note recorded on repair order #%d successfully", orderID), nil
+}
+
+func (s *AgentService) handleCloseRepairOrder(user model.User, args map[string]interface{}) (interface{}, error) {
+	var orderID uint
+	if v, ok := args["order_id"].(float64); ok {
+		orderID = uint(v)
+	} else if v, ok := args["order_id"].(int); ok {
+		orderID = uint(v)
+	}
+	solution, _ := args["solution"].(string)
+	faultReason, _ := args["fault_reason"].(string)
+	if orderID == 0 || strings.TrimSpace(solution) == "" {
+		return nil, fmt.Errorf("order_id and solution are required")
+	}
+
+	db := database.GetDB()
+	var order model.RepairOrder
+	if err := db.Preload("Equipment.Workshop").First(&order, orderID).Error; err != nil {
+		return nil, fmt.Errorf("repair order #%d not found", orderID)
+	}
+
+	if user.Role != "admin" && user.FactoryID != nil {
+		if order.Equipment == nil || order.Equipment.Workshop == nil || order.Equipment.Workshop.FactoryID != *user.FactoryID {
+			return nil, fmt.Errorf("permission denied: repair order belongs to another factory")
+		}
+	}
+
+	now := time.Now()
+	updates := map[string]interface{}{
+		"status":       model.RepairClosed,
+		"solution":     solution,
+		"completed_at": &now,
+		"closed_at":    &now,
+	}
+	if faultReason != "" {
+		updates["fault_code"] = faultReason
+	}
+
+	if err := db.Model(&order).Updates(updates).Error; err != nil {
+		return nil, fmt.Errorf("failed to update order: %w", err)
+	}
+
+	db.Create(&model.RepairLog{
+		OrderID: orderID,
+		UserID:  user.ID,
+		Action:  "agent_close_order",
+		Content: fmt.Sprintf("Closed by Agent: %s", solution),
+	})
+
+	return fmt.Sprintf("Repair order #%d completed and closed successfully", orderID), nil
 }
