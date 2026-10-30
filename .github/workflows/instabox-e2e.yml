@@ -1,0 +1,58 @@
+name: InstaBox E2E Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  fullstack-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install InstaBox CLI
+        run: |
+          curl -fsSL https://instabox.sh/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Launch Test Sandbox
+        env:
+          INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
+        run: |
+          BOX_NAME="eam-ci-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          echo "BOX_NAME=$BOX_NAME" >> $GITHUB_ENV
+          instabox create --name "$BOX_NAME" --snapshot ems-demo-v2 --timeout 15m --on-timeout kill
+
+      - name: Run Full-Stack Health and API Verification
+        env:
+          INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
+        run: |
+          instabox exec "$BOX_NAME" -- 'cd /data/home/EMS && docker compose up -d'
+          sleep 10
+          instabox exec "$BOX_NAME" -- 'docker restart ems-backend && sleep 5 && docker restart ems-frontend && sleep 3'
+          instabox exec "$BOX_NAME" -- 'curl -fsS http://localhost:3000/health'
+          instabox exec "$BOX_NAME" -- '
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/api/v1/auth/login \
+              -H "Content-Type: application/json" \
+              -d "{\"username\":\"ci_probe\",\"password\":\"wrong_pass\"}")
+            if [ "$STATUS" -eq 401 ]; then
+              echo "API and DB authentication path verified (HTTP 401 returned as expected)"
+              exit 0
+            else
+              echo "Unexpected response code: $STATUS"
+              exit 1
+            fi
+          '
+
+      - name: Teardown Sandbox
+        if: always()
+        env:
+          INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
+        run: |
+          if [ -n "$BOX_NAME" ]; then
+            instabox rm "$BOX_NAME" || true
+          fi
