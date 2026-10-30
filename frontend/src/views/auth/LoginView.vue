@@ -26,7 +26,7 @@
             <span>EAM-Agent · Enterprise Asset Brain</span>
           </div>
           <div class="window-actions-spacer">
-            <span class="version-tag">macOS 27</span>
+            <span class="version-tag">v2.1 Pro</span>
           </div>
         </div>
 
@@ -869,5 +869,321 @@ kbd {
   .window-content-pane {
     padding: 30px 24px;
   }
+}
+
+/* ============================================
+   macOS Dark Mode Adaptation for Login
+   ============================================ */
+:global([data-theme="dark"]) .login-container {
+  background-color: #0d0e12;
+  color: #f5f5f7;
+}
+
+:global([data-theme="dark"]) .macos-aura-bg {
+  background:
+    radial-gradient(900px 620px at 15% 10%, rgba(30, 64, 175, 0.35), transparent 65%),
+    radial-gradient(800px 600px at 90% 25%, rgba(136, 19, 55, 0.25), transparent 60%),
+    radial-gradient(900px 700px at 50% 100%, rgba(120, 53, 15, 0.25), transparent 65%),
+    linear-gradient(160deg, #090d16 0%, #150e18 50%, #16100d 100%);
+}
+
+:global([data-theme="dark"]) .macos-window-card {
+  background: rgba(28, 28, 34, 0.88);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 24px 64px -12px rgba(0, 0, 0, 0.65),
+    0 12px 28px -8px rgba(0, 0, 0, 0.45);
+}
+
+:global([data-theme="dark"]) .window-chrome {
+  background: rgba(22, 22, 26, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:global([data-theme="dark"]) .window-title-chip {
+  background: rgba(255, 255, 255, 0.06);
+  color: #d1d1d6;
+}
+
+:global([data-theme="dark"]) .version-tag {
+  color: #a1a1a6;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+:global([data-theme="dark"]) .window-sidebar {
+  background: rgba(20, 20, 24, 0.6);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:global([data-theme="dark"]) .app-squircle-icon {
+  background: #24242a;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+:global([data-theme="dark"]) .app-name {
+  color: #ffffff;
+}
+
+:global([data-theme="dark"]) .app-tagline {
+  color: #a1a1a6;
+}
+
+:global([data-theme="dark"]) .pill-icon {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+:global([data-theme="dark"]) .pill-title {
+  color: #ffffff;
+}
+
+:global([data-theme="dark"]) .pill-desc {
+  color: #8e8e93;
+}
+
+:global([data-theme="dark"]) .sidebar-dock-footer {
+  color: #8e8e93;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:global([data-theme="dark"]) .window-content-pane {
+  background: #18181c;
+}
+
+:global([data-theme="dark"]) .pane-header h2 {
+  color: #ffffff;
+}
+
+:global([data-theme="dark"]) .pane-header p {
+  color: #8e8e93;
+}
+
+:global([data-theme="dark"]) .input-label {
+  color: #d1d1d6;
+}
+
+:global([data-theme="dark"]) :deep(.el-input__wrapper) {
+  background: #24242a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+:global([data-theme="dark"]) :deep(.el-input__wrapper:hover) {
+  background: #2c2c34 !important;
+}
+
+:global([data-theme="dark"]) :deep(.el-input__wrapper.is-focus) {
+  background: #1e1e24 !important;
+  border-color: #0a7cff !important;
+  box-shadow:
+    0 0 0 3.5px rgba(10, 124, 255, 0.25),
+    inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+:global([data-theme="dark"]) :deep(.el-input__inner) {
+  color: #ffffff !important;
+}
+
+:global([data-theme="dark"]) :deep(.el-input__inner::placeholder) {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+:global([data-theme="dark"]) .shoji-inset-box {
+  background: #202026;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+:global([data-theme="dark"]) .inset-tip {
+  color: #8e8e93;
+}
+
+:global([data-theme="dark"]) .cred-label {
+  color: #a1a1a6;
+}
+
+:global([data-theme="dark"]) kbd {
+  background: #2c2c34;
+  color: #ffffff;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+:global([data-theme="dark"]) .switch-prompt {
+  color: #8e8e93;
+}
+
+</style>
+
+<style>
+[data-theme="dark"] .login-container,
+.dark .login-container {
+  background-color: #0c0d12 !important;
+  color: #f5f5f7 !important;
+}
+
+[data-theme="dark"] .macos-aura-bg,
+.dark .macos-aura-bg {
+  background:
+    radial-gradient(900px 620px at 15% 10%, rgba(30, 64, 175, 0.4), transparent 65%),
+    radial-gradient(800px 600px at 90% 25%, rgba(136, 19, 55, 0.3), transparent 60%),
+    radial-gradient(900px 700px at 50% 100%, rgba(120, 53, 15, 0.3), transparent 65%),
+    linear-gradient(160deg, #090d16 0%, #150e18 50%, #16100d 100%) !important;
+}
+
+[data-theme="dark"] .macos-window-card,
+.dark .macos-window-card {
+  background: rgba(28, 28, 34, 0.9) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 24px 64px -12px rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="dark"] .window-chrome,
+.dark .window-chrome {
+  background: rgba(22, 22, 26, 0.8) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .window-title-chip,
+.dark .window-title-chip {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #d1d1d6 !important;
+}
+
+[data-theme="dark"] .version-tag,
+.dark .version-tag {
+  color: #a1a1a6 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .window-sidebar,
+.dark .window-sidebar {
+  background: rgba(20, 20, 24, 0.65) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .app-squircle-icon,
+.dark .app-squircle-icon {
+  background: #24242a !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .app-name,
+.dark .app-name {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .app-tagline,
+.dark .app-tagline {
+  color: #a1a1a6 !important;
+}
+
+[data-theme="dark"] .pill-icon,
+.dark .pill-icon {
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .pill-title,
+.dark .pill-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .pill-desc,
+.dark .pill-desc {
+  color: #8e8e93 !important;
+}
+
+[data-theme="dark"] .sidebar-dock-footer,
+.dark .sidebar-dock-footer {
+  color: #8e8e93 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .window-content-pane,
+.dark .window-content-pane {
+  background: #18181c !important;
+}
+
+[data-theme="dark"] .pane-header h2,
+.dark .pane-header h2 {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .pane-header p,
+.dark .pane-header p {
+  color: #8e8e93 !important;
+}
+
+[data-theme="dark"] .input-label,
+.dark .input-label {
+  color: #d1d1d6 !important;
+}
+
+[data-theme="dark"] .el-form-item,
+.dark .el-form-item {
+  background: transparent !important;
+}
+
+[data-theme="dark"] .login-container .el-input__wrapper,
+.dark .login-container .el-input__wrapper {
+  background: #24242a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .login-container .el-input__wrapper:hover,
+.dark .login-container .el-input__wrapper:hover {
+  background: #2c2c34 !important;
+}
+
+[data-theme="dark"] .login-container .el-input__wrapper.is-focus,
+.dark .login-container .el-input__wrapper.is-focus {
+  background: #1e1e24 !important;
+  border-color: #0a7cff !important;
+  box-shadow:
+    0 0 0 3.5px rgba(10, 124, 255, 0.25),
+    inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .login-container .el-input__inner,
+.dark .login-container .el-input__inner {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .login-container .el-input__inner::placeholder,
+.dark .login-container .el-input__inner::placeholder {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+[data-theme="dark"] .shoji-inset-box,
+.dark .shoji-inset-box {
+  background: #202026 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .inset-tip,
+.dark .inset-tip {
+  color: #8e8e93 !important;
+}
+
+[data-theme="dark"] .cred-label,
+.dark .cred-label {
+  color: #a1a1a6 !important;
+}
+
+[data-theme="dark"] .login-container kbd,
+.dark .login-container kbd {
+  background: #2c2c34 !important;
+  color: #ffffff !important;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .switch-prompt,
+.dark .switch-prompt {
+  color: #8e8e93 !important;
 }
 </style>
