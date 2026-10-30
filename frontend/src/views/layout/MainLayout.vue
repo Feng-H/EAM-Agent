@@ -327,7 +327,7 @@
             </div>
             <div class="user-info">
               <span class="user-name">{{ authStore.userName }}</span>
-              <span class="user-role">{{ roleText }}</span>
+              <span v-if="roleText !== authStore.userName" class="user-role">{{ roleText }}</span>
             </div>
           </div>
 

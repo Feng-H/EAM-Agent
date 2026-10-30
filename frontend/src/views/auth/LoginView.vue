@@ -280,7 +280,7 @@ const applyRules: FormRules = {
 function fillAdmin() {
   loginForm.username = 'admin'
   loginForm.password = 'admin123'
-  ElMessage.success('已自动填入管理员凭据')
+  // ElMessage.success('已自动填入管理员凭据')
 }
 
 function toggleMode() {
@@ -299,7 +299,7 @@ async function handleLogin() {
     loading.value = true
     try {
       const response = await authStore.login(loginForm)
-      ElMessage.success('登录成功，正在进入工作空间')
+      // ElMessage.success('登录成功')
 
       if (response.must_change_password) {
         router.push('/change-password')

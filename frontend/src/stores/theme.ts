@@ -9,7 +9,7 @@ const DARK_CLASS = 'dark'
 export const useThemeStore = defineStore('theme', () => {
   // 从 localStorage 读取主题，默认为 dark
   const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
-  const theme = ref<Theme>(stored || 'dark')
+  const theme = ref<Theme>(stored || 'light')
 
   // 应用主题到 HTML 根元素和 body
   function applyTheme(themeValue: Theme) {
