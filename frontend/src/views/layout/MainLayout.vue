@@ -499,6 +499,91 @@ html, body {
   outline: 2px solid var(--color-primary, #409eff);
   outline-offset: 2px;
 }
+
+/* Dark mode support for macOS 27 Golden Gate */
+[data-theme="dark"] .sidebar {
+  background: rgba(24, 24, 28, 0.85);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .sidebar-header {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .logo-icon {
+  background: #2a2a30;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  color: #2b8fff;
+}
+
+[data-theme="dark"] .logo-text {
+  color: #f5f5f7;
+}
+
+[data-theme="dark"] .nav-item {
+  color: #a1a1a6;
+}
+
+[data-theme="dark"] .nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .nav-item.active {
+  background: #0a7cff;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .nav-subitem {
+  color: #86868b;
+}
+
+[data-theme="dark"] .nav-subitem:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .nav-subitem.active {
+  color: #2b8fff;
+  background: rgba(43, 143, 255, 0.15);
+}
+
+[data-theme="dark"] .main-content {
+  background: #141416;
+}
+
+[data-theme="dark"] .header {
+  background: rgba(20, 20, 24, 0.85);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .breadcrumb-current {
+  color: #f5f5f7;
+}
+
+[data-theme="dark"] .header-icon-btn,
+[data-theme="dark"] .theme-toggle,
+[data-theme="dark"] .logout-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #a1a1a6;
+}
+
+[data-theme="dark"] .header-icon-btn:hover,
+[data-theme="dark"] .theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .user-section {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .user-name {
+  color: #f5f5f7;
+}
+
 </style>
 
 <style scoped>
@@ -856,13 +941,21 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.035);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  color: #636366;
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.15s;
   padding: 0;
+}
+
+.header-icon-btn svg, .theme-toggle svg, .logout-btn svg {
+  width: 17px !important;
+  height: 17px !important;
+  display: block !important;
+  stroke: currentColor !important;
+  flex-shrink: 0 !important;
 }
 
 .header-icon-btn:hover, .theme-toggle:hover {
@@ -928,4 +1021,89 @@ html, body {
   overflow-x: hidden;
   scrollbar-width: thin;
 }
+
+/* Dark mode support for macOS 27 Golden Gate */
+[data-theme="dark"] .sidebar {
+  background: rgba(24, 24, 28, 0.85);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .sidebar-header {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .logo-icon {
+  background: #2a2a30;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  color: #2b8fff;
+}
+
+[data-theme="dark"] .logo-text {
+  color: #f5f5f7;
+}
+
+[data-theme="dark"] .nav-item {
+  color: #a1a1a6;
+}
+
+[data-theme="dark"] .nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .nav-item.active {
+  background: #0a7cff;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .nav-subitem {
+  color: #86868b;
+}
+
+[data-theme="dark"] .nav-subitem:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .nav-subitem.active {
+  color: #2b8fff;
+  background: rgba(43, 143, 255, 0.15);
+}
+
+[data-theme="dark"] .main-content {
+  background: #141416;
+}
+
+[data-theme="dark"] .header {
+  background: rgba(20, 20, 24, 0.85);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .breadcrumb-current {
+  color: #f5f5f7;
+}
+
+[data-theme="dark"] .header-icon-btn,
+[data-theme="dark"] .theme-toggle,
+[data-theme="dark"] .logout-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #a1a1a6;
+}
+
+[data-theme="dark"] .header-icon-btn:hover,
+[data-theme="dark"] .theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .user-section {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .user-name {
+  color: #f5f5f7;
+}
+
 </style>
