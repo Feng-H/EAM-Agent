@@ -6,13 +6,28 @@
       <div class="sidebar-header">
         <div class="logo-container">
           <div class="logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <!-- 外层工业六角框架 -->
-              <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" />
-              <!-- 核心齿轮 -->
-              <circle cx="12" cy="12" r="5" />
-              <!-- 智能运维脉冲线 (代表实时监测与诊断) -->
-              <path d="M9.5 12h1l1-2 1.5 4 1-2h1" stroke-width="1.2" />
+            <svg viewBox="0 0 32 32" fill="none" style="width: 22px; height: 22px;">
+              <defs>
+                <linearGradient id="main-top-grad" x1="16" y1="5" x2="16" y2="15" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0A7CFF" />
+                  <stop offset="1" stop-color="#60A5FA" />
+                </linearGradient>
+                <linearGradient id="main-left-grad" x1="8" y1="12" x2="16" y2="25" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0055D6" />
+                  <stop offset="1" stop-color="#1D4ED8" />
+                </linearGradient>
+                <linearGradient id="main-right-grad" x1="16" y1="15" x2="24" y2="25" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#2563EB" />
+                  <stop offset="1" stop-color="#1E40AF" />
+                </linearGradient>
+              </defs>
+              <!-- Isometric Cube -->
+              <path d="M16 5.5L25 10.5L16 15.5L7 10.5L16 5.5Z" fill="url(#main-top-grad)" />
+              <path d="M7 10.5L16 15.5V25.5L7 20.5V10.5Z" fill="url(#main-left-grad)" />
+              <path d="M16 15.5L25 10.5V20.5L16 25.5V15.5Z" fill="url(#main-right-grad)" />
+              <!-- AI Core Spark -->
+              <circle cx="16" cy="14" r="2.5" fill="#FFFFFF" />
+              <circle cx="16" cy="14" r="4.2" stroke="#FFFFFF" stroke-opacity="0.8" stroke-width="0.8" stroke-dasharray="1.5 1.5" />
             </svg>
           </div>
           <transition name="logo-text">

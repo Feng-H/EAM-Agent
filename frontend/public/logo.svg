@@ -1,8 +1,52 @@
-<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- 外层工业六角框架 -->
-  <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" stroke="#00ffA3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- 核心齿轮 -->
-  <circle cx="12" cy="12" r="5" stroke="#00ffA3" stroke-width="1.5"/>
-  <!-- 智能运维脉冲线 -->
-  <path d="M9.5 12h1l1-2 1.5 4 1-2h1" stroke="#00ffA3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background squircle gradient (Deep Tech Indigo to Apple Cupertino Blue) -->
+    <linearGradient id="eam-bg-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A7CFF" />
+      <stop offset="1" stop-color="#0055D6" />
+    </linearGradient>
+    
+    <!-- Isometric Top Face (Reflective Light Glass) -->
+    <linearGradient id="eam-top-grad" x1="16" y1="5" x2="16" y2="15" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.95" />
+      <stop offset="1" stop-color="#D0E4FF" stop-opacity="0.85" />
+    </linearGradient>
+
+    <!-- Isometric Left Face (Shaded Tech Plate) -->
+    <linearGradient id="eam-left-grad" x1="8" y1="12" x2="16" y2="25" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAF2FF" stop-opacity="0.85" />
+      <stop offset="1" stop-color="#93C5FD" stop-opacity="0.75" />
+    </linearGradient>
+
+    <!-- Isometric Right Face (Deep Shadow Plate) -->
+    <linearGradient id="eam-right-grad" x1="16" y1="15" x2="24" y2="25" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BFDBFE" stop-opacity="0.9" />
+      <stop offset="1" stop-color="#60A5FA" stop-opacity="0.8" />
+    </linearGradient>
+
+    <!-- AI Pulse Spark Filter -->
+    <filter id="core-glow" x="11" y="9" width="10" height="10" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="1" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Canvas Plate -->
+  <rect x="1" y="1" width="30" height="30" rx="7.5" fill="url(#eam-bg-grad)" />
+  <rect x="1" y="1" width="30" height="30" rx="7.5" stroke="rgba(255,255,255,0.25)" stroke-width="0.8" />
+
+  <!-- Isometric Asset Cube (代表物理设备与资产资产化建模) -->
+  <!-- Top Face -->
+  <path d="M16 6.5L24 11L16 15.5L8 11L16 6.5Z" fill="url(#eam-top-grad)" />
+  <!-- Left Face -->
+  <path d="M8 11L16 15.5V24.5L8 20V11Z" fill="url(#eam-left-grad)" />
+  <!-- Right Face -->
+  <path d="M16 15.5L24 11V20L16 24.5V15.5Z" fill="url(#eam-right-grad)" />
+
+  <!-- Inner AI Neural Core / Agent Pulse (代表大脑认知决策核心) -->
+  <circle cx="16" cy="14" r="2.8" fill="#0A7CFF" />
+  <circle cx="16" cy="14" r="1.5" fill="#FFFFFF" filter="url(#core-glow)" />
+
+  <!-- Dynamic Diagnostic Pulse Ring (微光波环) -->
+  <circle cx="16" cy="14" r="4.6" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="0.8" stroke-dasharray="1.5 1.5" />
 </svg>

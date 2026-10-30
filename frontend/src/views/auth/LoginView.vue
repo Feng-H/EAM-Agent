@@ -19,9 +19,10 @@
             <span class="light green"></span>
           </div>
           <div class="window-title-chip">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="title-chip-icon">
-              <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" />
-              <circle cx="12" cy="12" r="5" />
+            <svg viewBox="0 0 32 32" fill="none" class="title-chip-icon" style="width: 15px; height: 15px;">
+              <path d="M16 5.5L25 10.5L16 15.5L7 10.5L16 5.5Z" fill="#0A7CFF" />
+              <path d="M7 10.5L16 15.5V25.5L7 20.5V10.5Z" fill="#0055D6" />
+              <path d="M16 15.5L25 10.5V20.5L16 25.5V15.5Z" fill="#2563EB" />
             </svg>
             <span>EAM-Agent · Enterprise Asset Brain</span>
           </div>
@@ -36,16 +37,28 @@
           <div class="window-sidebar">
             <div class="app-identity">
               <div class="app-squircle-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" stroke="url(#blue-grad)" />
-                  <circle cx="12" cy="12" r="4.5" stroke="url(#blue-grad)" />
-                  <path d="M9.5 12h1l1-2 1.5 4 1-2h1" stroke="#0a7cff" stroke-width="1.8" stroke-linecap="round" />
+                <svg viewBox="0 0 32 32" fill="none" style="width: 36px; height: 36px;">
                   <defs>
-                    <linearGradient id="blue-grad" x1="2" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
-                      <stop stop-color="#0a7cff" />
-                      <stop offset="1" stop-color="#6366f1" />
+                    <linearGradient id="login-top-grad" x1="16" y1="5" x2="16" y2="15" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#0A7CFF" />
+                      <stop offset="1" stop-color="#60A5FA" />
+                    </linearGradient>
+                    <linearGradient id="login-left-grad" x1="8" y1="12" x2="16" y2="25" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#0055D6" />
+                      <stop offset="1" stop-color="#1D4ED8" />
+                    </linearGradient>
+                    <linearGradient id="login-right-grad" x1="16" y1="15" x2="24" y2="25" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#2563EB" />
+                      <stop offset="1" stop-color="#1E40AF" />
                     </linearGradient>
                   </defs>
+                  <!-- Isometric Asset Brain Cube -->
+                  <path d="M16 5.5L25 10.5L16 15.5L7 10.5L16 5.5Z" fill="url(#login-top-grad)" />
+                  <path d="M7 10.5L16 15.5V25.5L7 20.5V10.5Z" fill="url(#login-left-grad)" />
+                  <path d="M16 15.5L25 10.5V20.5L16 25.5V15.5Z" fill="url(#login-right-grad)" />
+                  <!-- Inner Cognitive Core -->
+                  <circle cx="16" cy="14" r="2.8" fill="#FFFFFF" />
+                  <circle cx="16" cy="14" r="4.6" stroke="#FFFFFF" stroke-opacity="0.8" stroke-width="0.8" stroke-dasharray="1.5 1.5" />
                 </svg>
               </div>
               <h1 class="app-name">EAM-Agent</h1>
