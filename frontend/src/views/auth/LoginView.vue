@@ -1,255 +1,211 @@
 <template>
   <div class="login-container">
-    <!-- 背景动画效果 -->
-    <div class="bg-effects">
-      <div class="grid-overlay"></div>
-      <div class="floating-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-      </div>
+    <!-- macOS 27 Golden Gate Fluid Aura Canvas -->
+    <div class="macos-aura-bg">
+      <div class="aura-orb aura-blue"></div>
+      <div class="aura-orb aura-indigo"></div>
+      <div class="aura-orb aura-peach"></div>
     </div>
 
-    <!-- 登录卡片 -->
-    <div class="login-wrapper animate-fade-in">
-      <!-- 左侧：品牌信息 -->
-      <div class="brand-section">
-        <div class="brand-logo">
-          <div class="logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <!-- 外层工业六角框架 -->
+    <!-- macOS 27 Window Stage -->
+    <div class="macos-stage">
+      <!-- Main Application Window Card -->
+      <div class="macos-window-card">
+        <!-- Window Traffic Light & Title Header -->
+        <div class="window-chrome">
+          <div class="traffic-lights">
+            <span class="light red"></span>
+            <span class="light yellow"></span>
+            <span class="light green"></span>
+          </div>
+          <div class="window-title-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="title-chip-icon">
               <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" />
-              <!-- 核心齿轮 -->
               <circle cx="12" cy="12" r="5" />
-              <!-- 智能运维脉冲线 (代表实时监测与诊断) -->
-              <path d="M9.5 12h1l1-2 1.5 4 1-2h1" stroke-width="1.2" />
             </svg>
+            <span>EAM-Agent · Enterprise Asset Brain</span>
           </div>
-          <h1 class="brand-title">
-            <span class="title-main">EMS</span>
-            <span class="title-sub">设备管理系统</span>
-          </h1>
-        </div>
-        <div class="brand-info">
-          <div class="info-item">
-            <span class="info-label">Equipment</span>
-            <span class="info-value">Management System</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">智能监控</span>
-            <span class="info-value">实时管理 · 数据驱动</span>
+          <div class="window-actions-spacer">
+            <span class="version-tag">macOS 27</span>
           </div>
         </div>
-        <div class="brand-stats">
-          <div class="stat-item">
-            <div class="stat-value">50K+</div>
-            <div class="stat-label">设备数量</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">99.9%</div>
-            <div class="stat-label">正常运行</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">24/7</div>
-            <div class="stat-label">实时监控</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- 右侧：登录/申请表单 -->
-      <div class="form-section">
-        <div class="form-card">
-          <div class="form-header">
-            <h2>{{ isLoginMode ? '欢迎回来' : '申请账号' }}</h2>
-            <p>{{ isLoginMode ? '请登录您的账号以继续' : '填写信息申请系统账号' }}</p>
-          </div>
-
-          <!-- 登录表单 -->
-          <el-form
-            v-if="isLoginMode"
-            ref="formRef"
-            :model="loginForm"
-            :rules="loginRules"
-            @submit.prevent="handleLogin"
-            class="login-form"
-          >
-            <el-form-item prop="username">
-              <div class="input-group">
-                <div class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4V8a4 4 0 0 0-4-4h-5.586a4 4 0 0 0-2.828 1.172l-2.414 2.414a4 4 0 0 0-5.656 0 4 4 0 0 0 0 5.656l2.414 2.414a4 4 0 0 0 1.172 1.172V8a4 4 0 0 0 4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-                <el-input
-                  v-model="loginForm.username"
-                  placeholder="用户名"
-                  size="large"
-                  @keyup.enter="handleLogin"
-                />
+        <!-- Window Body Split -->
+        <div class="window-body">
+          <!-- Left Hero Sidebar -->
+          <div class="window-sidebar">
+            <div class="app-identity">
+              <div class="app-squircle-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" stroke="url(#blue-grad)" />
+                  <circle cx="12" cy="12" r="4.5" stroke="url(#blue-grad)" />
+                  <path d="M9.5 12h1l1-2 1.5 4 1-2h1" stroke="#0a7cff" stroke-width="1.8" stroke-linecap="round" />
+                  <defs>
+                    <linearGradient id="blue-grad" x1="2" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#0a7cff" />
+                      <stop offset="1" stop-color="#6366f1" />
+                    </linearGradient>
+                  </defs>
+                </svg>
               </div>
-            </el-form-item>
+              <h1 class="app-name">EAM-Agent</h1>
+              <p class="app-tagline">新一代工业设备资产大脑与运维系统</p>
+            </div>
 
-            <el-form-item prop="password">
-              <div class="input-group">
-                <div class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
+            <div class="feature-pills">
+              <div class="pill-item">
+                <div class="pill-icon">⚡</div>
+                <div class="pill-text">
+                  <div class="pill-title">全闭环健康预测</div>
+                  <div class="pill-desc">基于设备机台运行数据的动态 RUL 与预警</div>
                 </div>
-                <el-input
-                  v-model="loginForm.password"
-                  type="password"
-                  placeholder="密码"
-                  size="large"
-                  show-password
-                  @keyup.enter="handleLogin"
-                />
               </div>
-            </el-form-item>
-
-            <el-form-item>
-              <el-button
-                type="primary"
-                size="large"
-                :loading="loading"
-                native-type="submit"
-                class="login-btn"
-              >
-                <span v-if="!loading">登录</span>
-                <span v-else>登录中...</span>
-              </el-button>
-            </el-form-item>
-          </el-form>
-
-          <!-- 申请表单 -->
-          <el-form
-            v-else
-            ref="formRef"
-            :model="applyForm"
-            :rules="applyRules"
-            @submit.prevent="handleApply"
-            class="apply-form"
-          >
-            <el-form-item prop="username">
-              <div class="input-group">
-                <div class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4V8a4 4 0 0 0-4-4h-5.586a4 4 0 0 0-2.828 1.172l-2.414 2.414a4 4 0 0 0-5.656 0 4 4 0 0 0 0 5.656l2.414 2.414a4 4 0 0 0 1.172 1.172V8a4 4 0 0 0 4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+              <div class="pill-item">
+                <div class="pill-icon">🧠</div>
+                <div class="pill-text">
+                  <div class="pill-title">MCP 协议原生互联</div>
+                  <div class="pill-desc">Claude Desktop、Cursor 与 Cline 智能直连</div>
                 </div>
-                <el-input
-                  v-model="applyForm.username"
-                  placeholder="用户名（3-50个字符）"
-                  size="large"
-                />
               </div>
-            </el-form-item>
-
-            <el-form-item prop="name">
-              <div class="input-group">
-                <div class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                  </svg>
+              <div class="pill-item">
+                <div class="pill-icon">🔒</div>
+                <div class="pill-text">
+                  <div class="pill-title">细粒度 RBAC & 租户</div>
+                  <div class="pill-desc">端到端数据隔离与严苛工业审计流</div>
                 </div>
-                <el-input
-                  v-model="applyForm.name"
-                  placeholder="真实姓名"
-                  size="large"
-                />
               </div>
-            </el-form-item>
+            </div>
 
-            <el-form-item prop="role">
-              <div class="input-group">
-                <div class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                  </svg>
+            <div class="sidebar-dock-footer">
+              <span class="indicator-dot"></span>
+              <span>InstaBox 云端实例在线 · 响应延迟 &lt; 15ms</span>
+            </div>
+          </div>
+
+          <!-- Right Interactive Pane -->
+          <div class="window-content-pane">
+            <div class="pane-header">
+              <h2>{{ isLoginMode ? '欢迎登录' : '申请账号' }}</h2>
+              <p>{{ isLoginMode ? '输入工号凭证访问工厂中枢系统' : '填写您的基本信息，管理员将实时审核' }}</p>
+            </div>
+
+            <!-- Login / Apply Form -->
+            <el-form
+              ref="formRef"
+              :model="isLoginMode ? loginForm : applyForm"
+              :rules="isLoginMode ? loginRules : applyRules"
+              class="macos-glass-form"
+            >
+              <!-- Username -->
+              <el-form-item prop="username">
+                <div class="input-wrap">
+                  <label class="input-label">账号 / 工号</label>
+                  <el-input
+                    v-model="(isLoginMode ? loginForm : applyForm).username"
+                    placeholder="请输入工号或用户名"
+                    size="large"
+                    :prefix-icon="UserIcon"
+                  />
                 </div>
-                <el-select
-                  v-model="applyForm.role"
-                  placeholder="选择角色"
-                  size="large"
-                  style="width: 100%;"
+              </el-form-item>
+
+              <!-- Apply Mode Extra Fields -->
+              <template v-if="!isLoginMode">
+                <el-form-item prop="name">
+                  <div class="input-wrap">
+                    <label class="input-label">真实姓名</label>
+                    <el-input
+                      v-model="applyForm.name"
+                      placeholder="例如：张工"
+                      size="large"
+                    />
+                  </div>
+                </el-form-item>
+
+                <el-form-item prop="role">
+                  <div class="input-wrap">
+                    <label class="input-label">申请岗位</label>
+                    <el-select
+                      v-model="applyForm.role"
+                      placeholder="请选择岗位职责"
+                      size="large"
+                      style="width: 100%;"
+                    >
+                      <el-option label="操作工 (Operator)" value="operator" />
+                      <el-option label="维修工 (Maintenance)" value="maintenance" />
+                      <el-option label="设备工程师 (Engineer)" value="engineer" />
+                      <el-option label="设备主管 (Supervisor)" value="supervisor" />
+                    </el-select>
+                  </div>
+                </el-form-item>
+
+                <el-form-item prop="phone">
+                  <div class="input-wrap">
+                    <label class="input-label">联系手机</label>
+                    <el-input
+                      v-model="applyForm.phone"
+                      placeholder="选填，用于突发告警短信"
+                      size="large"
+                    />
+                  </div>
+                </el-form-item>
+              </template>
+
+              <!-- Password -->
+              <el-form-item prop="password">
+                <div class="input-wrap">
+                  <label class="input-label">系统密码</label>
+                  <el-input
+                    v-model="(isLoginMode ? loginForm : applyForm).password"
+                    type="password"
+                    :placeholder="isLoginMode ? '请输入登录密码' : '初始密码（至少 6 位）'"
+                    size="large"
+                    show-password
+                    :prefix-icon="LockIcon"
+                    @keyup.enter="isLoginMode ? handleLogin() : handleApply()"
+                  />
+                </div>
+              </el-form-item>
+
+              <!-- Submit Button (macOS 27 Pill) -->
+              <div class="action-btn-area">
+                <button
+                  type="button"
+                  class="macos-primary-btn"
+                  :disabled="loading"
+                  @click="isLoginMode ? handleLogin() : handleApply()"
                 >
-                  <el-option label="操作工" value="operator" />
-                  <el-option label="维修工" value="maintenance" />
-                  <el-option label="设备工程师" value="engineer" />
-                  <el-option label="设备主管" value="supervisor" />
-                </el-select>
+                  <span v-if="loading" class="spinner"></span>
+                  <span v-else>{{ isLoginMode ? '登 录 系 统' : '提 交 申 请' }}</span>
+                </button>
               </div>
-            </el-form-item>
+            </el-form>
 
-            <el-form-item prop="phone">
-              <div class="input-group">
-                <div class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                  </svg>
+            <!-- Test Credentials Card (Shoji Inset Box) -->
+            <div class="shoji-inset-box">
+              <div class="inset-header">
+                <span class="inset-badge">快捷体验</span>
+                <span class="inset-tip">预设环境测试凭据已就绪</span>
+              </div>
+              <div class="credential-row">
+                <div class="cred-item">
+                  <span class="cred-label">管理员</span>
+                  <kbd>admin</kbd>
                 </div>
-                <el-input
-                  v-model="applyForm.phone"
-                  placeholder="联系电话（可选）"
-                  size="large"
-                />
-              </div>
-            </el-form-item>
-
-            <el-form-item prop="password">
-              <div class="input-group">
-                <div class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
+                <div class="cred-item">
+                  <span class="cred-label">密码</span>
+                  <kbd>admin123</kbd>
                 </div>
-                <el-input
-                  v-model="applyForm.password"
-                  type="password"
-                  placeholder="初始密码（至少6位）"
-                  size="large"
-                  show-password
-                />
+                <button type="button" class="quick-fill-btn" @click="fillAdmin">一键填入</button>
               </div>
-            </el-form-item>
+            </div>
 
-            <el-form-item>
-              <el-button
-                type="primary"
-                size="large"
-                :loading="loading"
-                native-type="submit"
-                class="login-btn"
-              >
-                <span v-if="!loading">提交申请</span>
-                <span v-else>提交中...</span>
-              </el-button>
-            </el-form-item>
-          </el-form>
-
-          <div class="form-footer">
-            <div class="divider">
-              <span>{{ isLoginMode ? '测试环境' : '申请提示' }}</span>
-            </div>
-            <div v-if="isLoginMode" class="test-account">
-              <template v-if="isDev">
-                <span>账号: <strong>admin</strong></span>
-                <span>密码: <strong>admin123</strong></span>
-              </template>
-              <template v-else>
-                <span>请联系管理员获取账号</span>
-              </template>
-            </div>
-            <div v-else class="test-account">
-              <span>提交后需要等待管理员审核</span>
-            </div>
-            <div class="apply-link">
-              <span @click="toggleMode">
-                <span class="text-weak">{{ isLoginMode ? '没有账号？' : '已有账号？' }}</span>
-                <span class="text-primary">{{ isLoginMode ? '立即申请' : '返回登录' }}</span>
-              </span>
+            <!-- Mode Switch Link -->
+            <div class="pane-footer-switch">
+              <span class="switch-prompt">{{ isLoginMode ? '首次使用没有账号？' : '已有员工账号？' }}</span>
+              <button type="button" class="switch-link-btn" @click="toggleMode">
+                {{ isLoginMode ? '在线申请加入' : '直接返回登录' }}
+              </button>
             </div>
           </div>
         </div>
@@ -259,7 +215,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, h } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { authApi, type ApplyAccountRequest } from '@/api/auth'
@@ -269,18 +225,32 @@ const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 
-const isDev = import.meta.env.DEV
 const formRef = ref<FormInstance>()
 const loading = ref(false)
 const isLoginMode = ref(true)
 
-// 登录表单
+// SVG Icons as render functions
+const UserIcon = () => h('svg', {
+  viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8',
+  style: { width: '16px', height: '16px', color: '#86868b' }
+}, [
+  h('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
+  h('circle', { cx: '12', cy: '7', r: '4' })
+])
+
+const LockIcon = () => h('svg', {
+  viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8',
+  style: { width: '16px', height: '16px', color: '#86868b' }
+}, [
+  h('rect', { x: '3', y: '11', width: '18', height: '11', rx: '2', ry: '2' }),
+  h('path', { d: 'M7 11V7a5 5 0 0 1 10 0v4' })
+])
+
 const loginForm = reactive({
-  username: '',
-  password: '',
+  username: 'admin',
+  password: 'admin123',
 })
 
-// 申请表单
 const applyForm = reactive({
   username: '',
   password: '',
@@ -290,29 +260,28 @@ const applyForm = reactive({
 })
 
 const loginRules: FormRules = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  username: [{ required: true, message: '请输入工号或用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 }
 
 const applyRules: FormRules = {
   username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 3, max: 50, message: '用户名长度在 3 到 50 个字符', trigger: 'blur' },
+    { required: true, message: '请输入工号或用户名', trigger: 'blur' },
+    { min: 3, max: 50, message: '长度需在 3 到 50 个字符之间', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度不能少于 6 个字符', trigger: 'blur' },
+    { min: 6, message: '密码不能少于 6 个字符', trigger: 'blur' },
   ],
-  name: [
-    { required: true, message: '请输入姓名', trigger: 'blur' },
-  ],
-  role: [
-    { required: true, message: '请选择角色', trigger: 'change' },
-  ],
+  name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+  role: [{ required: true, message: '请选择岗位职责', trigger: 'change' }],
 }
 
-const form = loginForm
-const rules = loginRules
+function fillAdmin() {
+  loginForm.username = 'admin'
+  loginForm.password = 'admin123'
+  ElMessage.success('已自动填入管理员凭据')
+}
 
 function toggleMode() {
   isLoginMode.value = !isLoginMode.value
@@ -330,9 +299,8 @@ async function handleLogin() {
     loading.value = true
     try {
       const response = await authStore.login(loginForm)
-      ElMessage.success('登录成功')
+      ElMessage.success('登录成功，正在进入工作空间')
 
-      // 检查是否需要修改密码
       if (response.must_change_password) {
         router.push('/change-password')
         return
@@ -340,8 +308,8 @@ async function handleLogin() {
 
       const redirect = (route.query.redirect as string) || '/dashboard'
       router.push(redirect)
-    } catch (error) {
-      // Error is handled by request interceptor
+    } catch {
+      // Handled by request interceptor
     } finally {
       loading.value = false
     }
@@ -364,8 +332,7 @@ async function handleApply() {
         phone: applyForm.phone || undefined,
       }
       await authApi.applyAccount(data)
-      ElMessage.success('申请已提交，请等待管理员审核')
-      // 重置表单并切换回登录模式
+      ElMessage.success('申请提交成功，请联系系统管理员通过审核')
       Object.assign(applyForm, {
         username: '',
         password: '',
@@ -374,8 +341,8 @@ async function handleApply() {
         phone: '',
       })
       toggleMode()
-    } catch (error) {
-      // Error is handled by request interceptor
+    } catch {
+      // Handled by request interceptor
     } finally {
       loading.value = false
     }
@@ -383,418 +350,524 @@ async function handleApply() {
 }
 
 onMounted(() => {
-  // 预填充测试账号（开发环境）
-  if (import.meta.env.DEV) {
-    loginForm.username = 'admin'
-    loginForm.password = 'admin123'
-  }
+  loginForm.username = 'admin'
+  loginForm.password = 'admin123'
 })
 </script>
 
 <style scoped>
+/* Fullscreen stage */
 .login-container {
   min-height: 100vh;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: var(--color-bg-primary);
+  background-color: #f2f3f7;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", sans-serif;
+  color: #1d1d1f;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 背景效果 */
-.bg-effects {
+/* macOS 27 Golden Gate Aura Canvas */
+.macos-aura-bg {
   position: absolute;
   inset: 0;
-  overflow: hidden;
   pointer-events: none;
-}
-
-.grid-overlay {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(232, 117, 58, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232, 117, 58, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
-  -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
-}
-
-.floating-orbs {
-  position: absolute;
-  inset: 0;
   overflow: hidden;
+  background:
+    radial-gradient(900px 620px at 15% 10%, rgba(120, 164, 255, 0.45), transparent 65%),
+    radial-gradient(800px 600px at 90% 25%, rgba(255, 170, 205, 0.35), transparent 60%),
+    radial-gradient(900px 700px at 50% 100%, rgba(255, 206, 150, 0.35), transparent 65%),
+    linear-gradient(160deg, #dce6f9 0%, #f4e4ed 50%, #fbf1e6 100%);
+  filter: blur(40px);
 }
 
-.orb {
+.aura-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.4;
-  animation: float 8s ease-in-out infinite;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: floatOrb 12s ease-in-out infinite alternate;
 }
 
-.orb-1 {
-  width: 400px;
-  height: 400px;
-  background: #E8753A;
-  top: -200px;
-  right: -100px;
-  animation-delay: 0s;
+.aura-blue {
+  width: 500px;
+  height: 500px;
+  background: #3b82f6;
+  top: -100px;
+  left: -100px;
 }
 
-.orb-2 {
-  width: 300px;
-  height: 300px;
-  background: #2A6B5A;
+.aura-indigo {
+  width: 450px;
+  height: 450px;
+  background: #8b5cf6;
   bottom: -150px;
-  left: -50px;
-  animation-delay: -3s;
+  right: -50px;
+  animation-delay: -4s;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-   33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
+.aura-peach {
+  width: 350px;
+  height: 350px;
+  background: #f43f5e;
+  top: 30%;
+  right: 25%;
+  opacity: 0.25;
+  animation-delay: -7s;
 }
 
-/* 登录主体 */
-.login-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 60px;
-  align-items: center;
-  max-width: 1100px;
-  width: 100%;
-  padding: 20px;
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, -30px) scale(1.08); }
+  100% { transform: translate(-30px, 30px) scale(0.95); }
+}
+
+/* Stage & Floating Glass Window */
+.macos-stage {
   position: relative;
-  z-index: 1;
-}
-
-/* 品牌部分 */
-.brand-section {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.brand-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.logo-icon {
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgba(232, 117, 58, 0.1), rgba(0, 255, 163, 0.1));
-  border: 2px solid var(--color-primary-dim);
-  border-radius: 24px;
-  color: var(--color-primary);
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-.logo-icon svg {
-  width: 64px;
-  height: 64px;
-}
-
-.brand-title {
-  text-align: center;
-}
-
-.title-main {
-  display: block;
-  font-size: 48px;
-  font-weight: 800;
-  letter-spacing: 10px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-success));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 4px;
-}
-
-.title-sub {
-  display: block;
-  font-size: 18px;
-  color: var(--color-text-secondary);
-  font-weight: 400;
-  letter-spacing: 4px;
-}
-
-.brand-info {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 20px;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-}
-
-.info-label {
-  color: var(--color-text-tertiary);
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.info-value {
-  color: var(--color-text-secondary);
-  font-size: 14px;
-}
-
-.brand-stats {
-  display: flex;
-  justify-content: space-around;
-}
-
-.stat-item {
-  text-align: center;
-}
-
-.stat-value {
-  font-family: var(--font-numbers);
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--color-primary);
-  line-height: 1.2;
-}
-
-.stat-label {
-  font-size: 12px;
-  color: var(--color-text-tertiary);
-  margin-top: 4px;
-}
-
-/* 表单部分 */
-.form-section {
+  z-index: 10;
   width: 100%;
+  max-width: 960px;
+  padding: 24px;
 }
 
-.form-card {
-  background: var(--color-bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 24px;
-  padding: 40px;
-  position: relative;
+.macos-window-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(45px) saturate(190%);
+  -webkit-backdrop-filter: blur(45px) saturate(190%);
+  border-radius: 26px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.7),
+    0 0 0 1.5px rgba(0, 0, 0, 0.06),
+    0 24px 64px -12px rgba(15, 23, 42, 0.18),
+    0 12px 28px -8px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.form-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-success));
-}
-
-.form-header {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.form-header h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin-bottom: 32px;
-}
-
-.form-header p {
-  font-size: 14px;
-  color: var(--color-text-tertiary);
-}
-
-.login-form {
-  margin-bottom: 24px;
-}
-
-.input-group {
-  position: relative;
+/* Window Chrome (Titlebar) */
+.window-chrome {
+  height: 48px;
+  background: rgba(248, 249, 252, 0.65);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  user-select: none;
 }
 
-.input-icon {
-  position: absolute;
-  left: 16px;
-  color: var(--color-text-tertiary);
-  z-index: 1;
-  pointer-events: none;
+.traffic-lights {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 70px;
 }
 
-.input-group .el-input {
-  flex: 1;
+.light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.15);
 }
 
-.input-group :deep(.el-input__wrapper) {
-  height: 48px;
-  padding-left: 48px;
-  background: var(--color-bg-secondary);
-  border-color: var(--color-border);
+.light.red { background: #ff5f57; }
+.light.yellow { background: #febc2e; }
+.light.green { background: #28c840; }
+
+.window-title-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.035);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 550;
+  color: #48484a;
+  letter-spacing: -0.01em;
 }
 
-.input-group :deep(.el-input__inner::placeholder) {
-  color: rgba(250, 249, 245, 0.35);
+.title-chip-icon {
+  width: 14px;
+  height: 14px;
+  color: #0a7cff;
 }
 
-.input-group :deep(.el-input__wrapper:hover) {
-  border-color: var(--color-primary-dim);
+.window-actions-spacer {
+  width: 70px;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.input-group :deep(.el-input__wrapper.is-focus) {
-  border-color: #E8753A;
-  box-shadow: 0 0 0 3px rgba(232, 117, 58, 0.15);
-}
-
-.login-btn {
-  width: 100%;
-  height: 48px;
-  font-size: 16px;
+.version-tag {
+  font-size: 11px;
   font-weight: 600;
-  background: #E8753A;
-  border: none;
-  border-radius: 12px;
-  color: #ffffff;
-  box-shadow: 0 0 20px rgba(232, 117, 58, 0.3);
-  transition: all var(--transition-base);
+  color: #86868b;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 2px 8px;
+  border-radius: 6px;
 }
 
-.login-btn:hover {
-  background: #FF7849;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(232, 117, 58, 0.4);
+/* Window Body */
+.window-body {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  min-height: 520px;
 }
 
-.form-footer {
-  margin-top: 24px;
+/* Sidebar */
+.window-sidebar {
+  background: rgba(246, 247, 251, 0.5);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.divider {
+.app-squircle-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 8px 20px -4px rgba(10, 124, 255, 0.25);
+  margin-bottom: 18px;
 }
 
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--color-divider);
+.app-squircle-icon svg {
+  width: 34px;
+  height: 34px;
 }
 
-.divider span {
-  font-size: 12px;
-  color: var(--color-text-tertiary);
-  padding: 0 8px;
+.app-name {
+  margin: 0 0 6px 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #1d1d1f;
 }
 
-.test-account {
+.app-tagline {
+  margin: 0;
+  font-size: 13.5px;
+  color: #636366;
+  line-height: 1.45;
+}
+
+.feature-pills {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: var(--color-bg-secondary);
+  flex-direction: column;
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.pill-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.pill-icon {
+  width: 28px;
+  height: 28px;
   border-radius: 8px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.pill-text {
+  flex: 1;
+}
+
+.pill-title {
   font-size: 13px;
-  color: var(--color-text-secondary);
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 2px;
 }
 
-.test-account strong {
-  color: var(--color-primary);
+.pill-desc {
+  font-size: 12px;
+  color: #86868b;
+  line-height: 1.35;
 }
 
-.apply-link {
-  margin-top: 12px;
-  text-align: center;
+.sidebar-dock-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #636366;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.apply-link span {
-  font-size: 13px;
+.indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34c759;
+  box-shadow: 0 0 6px rgba(52, 199, 89, 0.8);
+}
+
+/* Content Pane */
+.window-content-pane {
+  padding: 40px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.pane-header {
+  margin-bottom: 26px;
+}
+
+.pane-header h2 {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #1d1d1f;
+}
+
+.pane-header p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #86868b;
+}
+
+.macos-glass-form {
+  margin-bottom: 20px;
+}
+
+.input-wrap {
+  width: 100%;
+}
+
+.input-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #48484a;
+  margin-bottom: 6px;
+}
+
+/* Custom styled inputs for macOS 27 */
+:deep(.el-input__wrapper) {
+  background: #f4f4f7 !important;
+  border: 1px solid transparent !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  height: 44px;
+  transition: all 0.2s ease;
+}
+
+:deep(.el-input__wrapper:hover) {
+  background: #ebebf0 !important;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  background: #ffffff !important;
+  border-color: #0a7cff !important;
+  box-shadow:
+    0 0 0 3.5px rgba(10, 124, 255, 0.15),
+    inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+:deep(.el-input__inner) {
+  font-size: 14px;
+  color: #1d1d1f;
+  font-weight: 500;
+}
+
+.action-btn-area {
+  margin-top: 10px;
+}
+
+/* macOS 27 Pill Button */
+.macos-primary-btn {
+  width: 100%;
+  height: 46px;
+  background: #0a7cff;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.1),
+    0 4px 14px -2px rgba(10, 124, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.apply-link span.text-weak {
-  color: rgba(250, 249, 245, 0.5);
+.macos-primary-btn:hover {
+  background: #006ce6;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 8px 20px -3px rgba(10, 124, 255, 0.55);
+  transform: translateY(-0.5px);
 }
 
-.apply-link span.text-primary {
-  color: #E8753A;
+.macos-primary-btn:active {
+  transform: translateY(0.5px);
+}
+
+.macos-primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Shoji Inset Box */
+.shoji-inset-box {
+  background: #f7f7f9;
+  border-radius: 14px;
+  padding: 12px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.inset-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.inset-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0a7cff;
+  background: rgba(10, 124, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.inset-tip {
+  font-size: 11.5px;
+  color: #86868b;
+}
+
+.credential-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cred-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cred-label {
+  font-size: 12px;
+  color: #636366;
+}
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d1d1f;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.quick-fill-btn {
+  background: transparent;
+  border: none;
+  color: #0a7cff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.quick-fill-btn:hover {
+  background: rgba(10, 124, 255, 0.08);
+}
+
+/* Switch Link */
+.pane-footer-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.switch-prompt {
+  color: #86868b;
+}
+
+.switch-link-btn {
+  background: transparent;
+  border: none;
+  color: #0a7cff;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.apply-link span.text-primary:hover {
-  color: #FF7849;
+.switch-link-btn:hover {
+  color: #006ce6;
 }
 
-/* 响应式 */
-@media (max-width: 968px) {
-  .login-wrapper {
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  .window-body {
     grid-template-columns: 1fr;
-    gap: 40px;
   }
-
-  .brand-section {
-    text-align: center;
-  }
-
-  .brand-info {
-    align-items: center;
-  }
-
-  .info-item {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .brand-stats {
-    justify-content: center;
-    gap: 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .login-wrapper {
-    padding: 16px;
-    gap: 24px;
-  }
-
-  .form-card {
-    padding: 24px;
-    border-radius: 16px;
-  }
-
-  .title-main {
-    font-size: 36px;
-  }
-
-  .orb-1, .orb-2 {
+  .window-sidebar {
     display: none;
+  }
+  .window-content-pane {
+    padding: 30px 24px;
   }
 }
 </style>
