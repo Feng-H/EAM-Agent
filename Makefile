@@ -1,6 +1,9 @@
 .PHONY: build test lint dev stop clean backend-build backend-test frontend-build frontend-test docker-build docker-up docker-down
 
 # Backend
+mcp-build:
+	cd backend && go build -o ../bin/eam-mcp ./cmd/eam-mcp
+
 backend-build:
 	cd backend && go build -o ../bin/ems-api ./main.go
 
