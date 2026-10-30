@@ -37,7 +37,7 @@
         </el-table-column>
         <el-table-column prop="phone" label="电话" width="140" />
         <el-table-column prop="created_at" label="申请时间" width="180" />
-        <el-table-column label="操作" width="240" fixed="right">
+        <el-table-column label="操作" width="150" align="center" fixed="right">
           <template #default="{ row }">
             <el-button type="success" size="small" @click="handleApprove(row, true)">通过</el-button>
             <el-button type="danger" size="small" @click="handleReject(row)">拒绝</el-button>
@@ -98,7 +98,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="created_at" label="创建时间" width="180" />
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column label="操作" width="150" align="center" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="openEditDialog(row)">编辑</el-button>
             <el-button link type="danger" size="small" @click="handleToggleActive(row)">

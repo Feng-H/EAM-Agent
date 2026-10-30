@@ -87,39 +87,39 @@
             <el-tag :type="getStatusType(row.status)" effect="light" round>{{ getStatusText(row.status) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="220" align="center" fixed="right">
+        <el-table-column label="操作" width="180" align="center" fixed="right">
           <template #default="{ row }">
             <div class="operation-buttons">
               <el-button size="small" type="primary" link @click="handleView(row)">
-                <el-icon><View /></el-icon> 查看
+                <el-icon><View /></el-icon>查看
               </el-button>
               <el-button size="small" type="primary" link @click="handleEdit(row)" v-if="canEdit">
-                <el-icon><Edit /></el-icon> 编辑
+                <el-icon><Edit /></el-icon>编辑
               </el-button>
-              <el-dropdown trigger="click" v-if="canEdit" class="operation-dropdown">
-                <el-button size="small" type="primary" link>
-                  <el-icon><More /></el-icon> 更多
+              <el-dropdown trigger="click" class="operation-dropdown">
+                <el-button size="small" type="info" link>
+                  <el-icon><More /></el-icon>更多
                 </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item v-if="row.status !== 'running'" @click="handleStatusAction(row, 'enable')">
+                    <el-dropdown-item @click="handleQRCode(row)">
+                      <el-icon><Grid /></el-icon>二维码
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="canEdit && row.status !== 'running'" @click="handleStatusAction(row, 'enable')">
                       启用设备
                     </el-dropdown-item>
-                    <el-dropdown-item v-if="row.status === 'running'" @click="handleStatusAction(row, 'seal')">
+                    <el-dropdown-item v-if="canEdit && row.status === 'running'" @click="handleStatusAction(row, 'seal')">
                       封存设备
                     </el-dropdown-item>
-                    <el-dropdown-item v-if="row.status !== 'scrapped'" @click="handleStatusAction(row, 'scrap')" divided>
+                    <el-dropdown-item v-if="canEdit && row.status !== 'scrapped'" @click="handleStatusAction(row, 'scrap')" divided>
                       报废设备
+                    </el-dropdown-item>
+                    <el-dropdown-item v-if="canDelete" @click="handleDelete(row)" divided style="color: var(--el-color-danger)">
+                      <el-icon><Delete /></el-icon>删除设备
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-              <el-button size="small" type="warning" link @click="handleQRCode(row)">
-                <el-icon><Grid /></el-icon> 码
-              </el-button>
-              <el-button size="small" type="danger" link @click="handleDelete(row)" v-if="canDelete">
-                <el-icon><Delete /></el-icon> 删除
-              </el-button>
             </div>
           </template>
         </el-table-column>
