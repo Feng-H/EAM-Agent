@@ -23,7 +23,6 @@ jobs:
         env:
           INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
         run: |
-          # 扫描并清理可能遗留的历史 CI 沙箱，保障不超过 5 个容器上限
           STALE_BOXES=$(instabox ls --json 2>/dev/null | jq -r '.[].name // empty' | grep '^eam-ci-' || true)
           for box in $STALE_BOXES; do
             echo "Reclaiming stale CI sandbox: $box"
@@ -45,33 +44,51 @@ jobs:
           instabox exec "$BOX_NAME" -- 'cd /data/home/EMS && docker compose up -d'
           
           instabox exec "$BOX_NAME" -- '
-            echo "Waiting for services to initialize..."
-            sleep 10
-            docker restart ems-backend
-            sleep 6
-            docker restart ems-frontend
+            echo "Waiting for full stack services to initialize..."
             
+            # 等待后端完成数据库握手与监听 (最多等待 60s)
+            READY=0
+            for i in $(seq 1 60); do
+              if docker logs ems-backend 2>&1 | grep -q "Server starting on port 8080"; then
+                echo "Backend Go API ready at ${i}s"
+                READY=1
+                break
+              fi
+              # 若后端因数据库启动竞争卡住，辅助轻量重启一次
+              if [ $i -eq 12 ] || [ $i -eq 25 ]; then
+                docker restart ems-backend >/dev/null 2>&1 || true
+              fi
+              sleep 1
+            done
+
+            if [ "$READY" -ne 1 ]; then
+              echo "Backend failed to start within 60s"
+              docker logs ems-backend --tail 30
+              exit 1
+            fi
+
+            # 确保前端反代绑定到最新后端容器
+            docker restart ems-frontend >/dev/null 2>&1
+            sleep 3
+
+            # 验证端到端 API 路由与数据库认证连通性
             SUCCESS=0
-            for i in $(seq 1 30); do
+            for i in $(seq 1 20); do
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/api/v1/auth/login \
                 -H "Content-Type: application/json" \
                 -d "{\"username\":\"ci_probe\",\"password\":\"wrong_pass\"}" || true)
               
               if [ "$STATUS" = "401" ]; then
-                echo "Full-stack API and DB authentication verified after ${i}s (HTTP 401)"
+                echo "Full-stack API and DB authentication verified (HTTP 401)"
                 SUCCESS=1
                 break
               fi
-              
-              if [ "$STATUS" = "502" ] && [ $((i % 6)) -eq 0 ]; then
-                docker restart ems-frontend >/dev/null 2>&1 || true
-              fi
               sleep 1
             done
-            
+
             if [ "$SUCCESS" -ne 1 ]; then
-              echo "Timed out waiting for API (last status: $STATUS)"
-              docker logs ems-backend --tail 30
+              echo "Timed out waiting for API route (last status: $STATUS)"
+              docker logs ems-backend --tail 20
               exit 1
             fi
             
