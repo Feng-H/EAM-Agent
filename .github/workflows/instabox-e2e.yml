@@ -19,6 +19,17 @@ jobs:
           curl -fsSL https://instabox.sh/install.sh | sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
+      - name: Quota Guard (Clean Stale CI Sandboxes)
+        env:
+          INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
+        run: |
+          # 扫描并清理可能遗留的历史 CI 沙箱，保障不超过 5 个容器上限
+          STALE_BOXES=$(instabox ls --json 2>/dev/null | jq -r '.[].name // empty' | grep '^eam-ci-' || true)
+          for box in $STALE_BOXES; do
+            echo "Reclaiming stale CI sandbox: $box"
+            instabox rm "$box" --yes || true
+          done
+
       - name: Launch Test Sandbox
         env:
           INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
@@ -75,4 +86,26 @@ jobs:
         run: |
           if [ -n "$BOX_NAME" ]; then
             instabox rm "$BOX_NAME" --yes || instabox rm "$BOX_NAME" || true
+          fi
+
+      - name: Notify Failure to Discord
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+            curl -s -H "Content-Type: application/json" -X POST -d '{
+              "embeds": [{
+                "title": "🚨 EAM-Agent 全栈集成测试失败",
+                "color": 15158332,
+                "description": "InstaBox 云端全栈沙箱自动化测试未通过，请排查原因。",
+                "fields": [
+                  {"name": "分支", "value": "'"${GITHUB_REF_NAME}"'", "inline": true},
+                  {"name": "提交", "value": "'"${GITHUB_SHA:0:7}"'", "inline": true},
+                  {"name": "触发者", "value": "'"${GITHUB_ACTOR}"'", "inline": true},
+                  {"name": "Run 详情", "value": "[点击查看 GitHub Actions 完整日志]('${GITHUB_SERVER_URL}'/'${GITHUB_REPOSITORY}'/actions/runs/'${GITHUB_RUN_ID}')"}
+                ],
+                "footer": {"text": "可直接在 Discord 回复「自动修复 CI」让 Hermes 介入排查"}
+              }]
+            }' "$DISCORD_WEBHOOK_URL" || true
           fi

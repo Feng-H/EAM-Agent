@@ -10,20 +10,40 @@ jobs:
   backend-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: '1.24'
       - name: Test
         run: cd backend && go test ./...
+      - name: Notify Failure to Discord
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+            curl -s -H "Content-Type: application/json" -X POST -d '{
+              "embeds": [{
+                "title": "🚨 EAM-Agent 后端单元测试失败",
+                "color": 15158332,
+                "description": "Go 单元测试未通过，请检查代码变更与逻辑。",
+                "fields": [
+                  {"name": "分支", "value": "'"${GITHUB_REF_NAME}"'", "inline": true},
+                  {"name": "提交", "value": "'"${GITHUB_SHA:0:7}"'", "inline": true},
+                  {"name": "Run 详情", "value": "[查看 GitHub Actions 日志]('${GITHUB_SERVER_URL}'/'${GITHUB_REPOSITORY}'/actions/runs/'${GITHUB_RUN_ID}')"}
+                ],
+                "footer": {"text": "可直接在 Discord 回复「自动修复 CI」让 Hermes 介入排查"}
+              }]
+            }' "$DISCORD_WEBHOOK_URL" || true
+          fi
 
   frontend-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Build
@@ -31,3 +51,23 @@ jobs:
           cd frontend
           npm ci
           npm run build
+      - name: Notify Failure to Discord
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+            curl -s -H "Content-Type: application/json" -X POST -d '{
+              "embeds": [{
+                "title": "🚨 EAM-Agent 前端构建失败",
+                "color": 15158332,
+                "description": "Vue3/Vite 前端构建未通过，请检查依赖或类型错误。",
+                "fields": [
+                  {"name": "分支", "value": "'"${GITHUB_REF_NAME}"'", "inline": true},
+                  {"name": "提交", "value": "'"${GITHUB_SHA:0:7}"'", "inline": true},
+                  {"name": "Run 详情", "value": "[查看 GitHub Actions 日志]('${GITHUB_SERVER_URL}'/'${GITHUB_REPOSITORY}'/actions/runs/'${GITHUB_RUN_ID}')"}
+                ],
+                "footer": {"text": "可直接在 Discord 回复「自动修复 CI」让 Hermes 介入排查"}
+              }]
+            }' "$DISCORD_WEBHOOK_URL" || true
+          fi
