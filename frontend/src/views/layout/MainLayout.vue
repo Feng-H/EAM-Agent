@@ -16,7 +16,7 @@
             </svg>
           </div>
           <transition name="logo-text">
-            <span v-show="!sidebarCollapsed" class="logo-text">EMS</span>
+            <span v-show="!sidebarCollapsed" class="logo-text">EAM-Agent</span>
           </transition>
         </div>
         <!-- 折叠按钮 - 固定在右上角 -->
@@ -665,7 +665,7 @@ html, body {
   gap: 12px;
   padding: 10px 12px;
   margin: 2px 0;
-  border-radius: var(--radius-md);
+  border-radius: 10px; font-weight: 500;
   color: var(--color-text-secondary);
   text-decoration: none;
   transition: all var(--transition-fast);
@@ -746,7 +746,7 @@ html, body {
 }
 
 .nav-group-toggle {
-  border-radius: var(--radius-md);
+  border-radius: 10px; font-weight: 500;
 }
 
 .nav-submenu {
@@ -761,7 +761,7 @@ html, body {
   min-width: 180px;
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: 10px; font-weight: 500;
   padding: 8px;
   box-shadow: var(--shadow-lg);
   z-index: 50;

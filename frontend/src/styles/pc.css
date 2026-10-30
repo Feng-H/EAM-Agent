@@ -24,7 +24,9 @@
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
+  letter-spacing: -0.02em;
+  font-weight: 650;
 }
 
 .page-title-icon {
@@ -46,8 +48,8 @@
 
 /* 卡片优化 */
 .el-card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-generous);
+  border: none;
+  border-radius: 18px;
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-base);
   background: var(--color-bg-card);
@@ -121,7 +123,9 @@
   font-size: 28px;
   font-weight: 500;
   color: var(--color-text-primary);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
+  letter-spacing: -0.02em;
+  font-weight: 650;
 }
 
 /* 表格优化 */
@@ -178,17 +182,25 @@
 }
 
 /* 按钮优化 - Claude风格 */
+.el-button {
+  border-radius: 999px;
+  font-weight: 550;
+  transition: all var(--transition-fast);
+}
+
 .el-button--primary {
-  background: var(--color-terracotta);
-  border-color: var(--color-terracotta);
-  color: #faf9f5;
-  font-weight: 500;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(10, 124, 255, 0.25);
 }
 
 .el-button--primary:hover {
   background: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
-  box-shadow: 0 4px 12px rgba(232, 117, 58, 0.3);
+  box-shadow: 0 4px 16px rgba(10, 124, 255, 0.35);
+  transform: translateY(-0.5px);
 }
 
 .el-button--success {
@@ -211,9 +223,10 @@
 
 /* 标签优化 */
 .el-tag {
-  border-radius: var(--radius-subtle);
-  font-weight: 500;
-  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 550;
+  padding: 3px 12px;
+  border: 1px solid transparent;
 }
 
 .el-tag--primary {
@@ -300,7 +313,9 @@
   font-size: 18px;
   font-weight: 500;
   color: var(--color-text-primary);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
+  letter-spacing: -0.02em;
+  font-weight: 650;
 }
 
 .el-dialog__body {
@@ -469,4 +484,81 @@
   .pagination {
     justify-content: center;
   }
+}
+
+/* ============================================
+   Shoji / Apple macOS Native Components
+   ============================================ */
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-tertiary);
+  border-radius: 5px;
+  box-shadow: inset 0 -1.5px 0 rgba(0, 0, 0, 0.15), 0 0 0 1px var(--color-border);
+}
+
+.shoji-card {
+  border-radius: 20px;
+  background: var(--color-bg-secondary);
+  box-shadow: 0 0 0 1px var(--color-border), 0 8px 24px -4px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.shoji-card:hover {
+  box-shadow: 0 0 0 1px var(--color-border), 0 16px 36px -6px rgba(0, 0, 0, 0.07);
+}
+
+.mac-window {
+  background: #18181c;
+  border-radius: 16px;
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.mac-titlebar {
+  height: 36px;
+  background: #222228;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  position: relative;
+}
+
+.mac-traffic-lights {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.mac-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+}
+
+.mac-dot.close { background: #ff5f57; }
+.mac-dot.min { background: #febc2e; }
+.mac-dot.max { background: #28c840; }
+
+.mac-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #a0a0ab;
+  font-size: 12px;
+  font-weight: 500;
+  pointer-events: none;
 }

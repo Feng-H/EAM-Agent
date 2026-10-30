@@ -6,16 +6,16 @@
 /* ==================== 通用变量（所有主题共享） ==================== */
 :root {
   /* 字体 - Claude风格 */
-  --font-serif: 'Georgia', 'Noto Serif SC', serif;
-  --font-sans: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  --font-serif: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Segoe UI", sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Geist Mono Variable", "JetBrains Mono", monospace;
   --font-display: var(--font-sans);
   --font-numbers: 'DIN Alternate', 'Oswald', 'Roboto Condensed', var(--font-sans);
 
   /* Claude 品牌色 */
-  --color-terracotta: #e8753a;
-  --color-terracotta-light: #ff7849;
-  --color-coral: #ff7849;
+  --color-terracotta: #0a7cff;
+  --color-terracotta-light: #2b8fff;
+  --color-coral: #0a7cff;
 
   /* 状态色 - 暖色调 */
   --color-success: #6b8e23;
@@ -53,10 +53,10 @@
 
 [data-theme="dark"] {
   /* 主色调 - 活力橙色 */
-  --color-primary: #e8753a;
+  --color-primary: #0a7cff;
   --color-primary-dim: rgba(232, 117, 58, 0.15);
   --color-primary-glow: rgba(232, 117, 58, 0.4);
-  --color-primary-hover: #ff7849;
+  --color-primary-hover: #0066d6;
 
   /* 状态色 */
   --color-success: #00FFA3;
@@ -116,7 +116,7 @@
   /* 文本色 - Claude深色 */
   --color-text-primary: #faf9f5;
   --color-text-secondary: #b0aea5;
-  --color-text-tertiary: #87867f;
+  --color-text-tertiary: #86868b;
   --color-text-muted: #5e5d59;
 
   /* 边框和分割线 */
@@ -140,24 +140,24 @@
 /* ==================== 浅色主题 ==================== */
 [data-theme="light"] {
   /* 主色调 - 活力橙色 */
-  --color-primary: #e8753a;
-  --color-primary-dim: rgba(232, 117, 58, 0.1);
-  --color-primary-glow: rgba(232, 117, 58, 0.2);
-  --color-primary-hover: #ff7849;
+  --color-primary: #0a7cff;
+  --color-primary-dim: rgba(10, 124, 255, 0.08);
+  --color-primary-glow: rgba(10, 124, 255, 0.25);
+  --color-primary-hover: #0066d6;
 
   /* 背景色 - Claude浅色主题 */
-  --color-bg-primary: #f5f4ed;
-  --color-bg-secondary: #faf9f5;
-  --color-bg-tertiary: #e8e6dc;
+  --color-bg-primary: #f5f5f7;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #ebebed;
   --color-bg-elevated: #ffffff;
-  --color-bg-card: #faf9f5;
+  --color-bg-card: #ffffff;
   --color-bg-card-hover: #ffffff;
-  --color-bg-input: #faf9f5;
+  --color-bg-input: #f0f0f2;
 
   /* 文本色 - Claude暖灰色系 */
-  --color-text-primary: #141413;
-  --color-text-secondary: #5e5d59;
-  --color-text-tertiary: #87867f;
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #48484a;
+  --color-text-tertiary: #86868b;
   --color-text-muted: #b0aea5;
 
   /* 边框和分割线 - Claude暖色 */
@@ -546,12 +546,12 @@ a:hover {
 [data-theme="dark"] {
   /* Element Plus CSS 变量覆盖 */
   --el-color-primary: var(--color-primary);
-  --el-color-primary-light-3: rgba(232, 117, 58, 0.3);
-  --el-color-primary-light-5: rgba(232, 117, 58, 0.15);
-  --el-color-primary-light-7: rgba(232, 117, 58, 0.08);
-  --el-color-primary-light-8: rgba(232, 117, 58, 0.05);
-  --el-color-primary-light-9: rgba(232, 117, 58, 0.03);
-  --el-color-primary-dark-2: #D15F2A;
+  --el-color-primary-light-3: rgba(10, 124, 255, 0.3);
+  --el-color-primary-light-5: rgba(10, 124, 255, 0.15);
+  --el-color-primary-light-7: rgba(10, 124, 255, 0.08);
+  --el-color-primary-light-8: rgba(10, 124, 255, 0.05);
+  --el-color-primary-light-9: rgba(10, 124, 255, 0.03);
+  --el-color-primary-dark-2: #1A75E0;
 
   --el-color-success: var(--color-success);
   --el-color-warning: var(--color-warning);
@@ -767,13 +767,13 @@ a:hover {
 
 /* 浅色模式下的 Element Plus 变量 */
 [data-theme="light"] {
-  --el-color-primary: #E8753A;
-  --el-color-primary-light-3: rgba(232, 117, 58, 0.3);
-  --el-color-primary-light-5: rgba(232, 117, 58, 0.15);
-  --el-color-primary-light-7: rgba(232, 117, 58, 0.08);
-  --el-color-primary-light-8: rgba(232, 117, 58, 0.05);
-  --el-color-primary-light-9: rgba(232, 117, 58, 0.03);
-  --el-color-primary-dark-2: #C15322;
+  --el-color-primary: #0A7CFF;
+  --el-color-primary-light-3: rgba(10, 124, 255, 0.3);
+  --el-color-primary-light-5: rgba(10, 124, 255, 0.15);
+  --el-color-primary-light-7: rgba(10, 124, 255, 0.08);
+  --el-color-primary-light-8: rgba(10, 124, 255, 0.05);
+  --el-color-primary-light-9: rgba(10, 124, 255, 0.03);
+  --el-color-primary-dark-2: #0066D6;
 
   --el-bg-color: #FFFFFF;
   --el-bg-color-page: #F5F7FA;

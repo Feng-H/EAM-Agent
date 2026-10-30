@@ -88,53 +88,89 @@
         <!-- MCP Protocol Tab -->
         <el-tab-pane label="MCP 协议接入" name="mcp">
           <div class="tab-content">
-            <el-alert
-              title="EAM-Agent 原生支持 Anthropic Model Context Protocol (MCP)。可直接与 Claude Desktop、Cursor、Cline 等 AI 宿主无缝直连。"
-              type="success"
-              show-icon
-              style="margin-bottom: 20px"
-            />
-            
-            <el-row :gutter="20">
-              <el-col :span="12">
-                <el-card shadow="hover">
-                  <template #header>
-                    <div class="card-header">
-                      <span>方式一：Claude Desktop 客户端配置 (stdio)</span>
-                    </div>
-                  </template>
-                  <p class="form-tip">在 <code>claude_desktop_config.json</code> 中配置 stdio 桥接：</p>
-                  <div class="schema-preview">
-                    <pre><code>{
-  "mcpServers": {
-    "eam-agent": {
-      "command": "/绝对路径/EAM-Agent/backend/bin/eam-mcp",
-      "env": {
-        "EAM_BASE_URL": "{{ originUrl }}",
-        "EAM_TOKEN": "在此填入您的 API 密钥"
-      }
-    }
-  }
-}</code></pre>
-                  </div>
-                </el-card>
-              </el-col>
-              <el-col :span="12">
-                <el-card shadow="hover">
-                  <template #header>
-                    <div class="card-header">
-                      <span>方式二：原生 SSE 云端直连 (Cursor / Web)</span>
-                    </div>
-                  </template>
-                  <p class="form-tip">直接配置标准 SSE 端点（无需本地执行文件）：</p>
-                  <div class="schema-preview">
-                    <pre><code>端点 URL:
-{{ originUrl }}/api/v1/mcp/sse
+            <!-- Shoji Quick Config Banner -->
+            <div class="mcp-banner">
+              <div class="mcp-banner-left">
+                <div class="mcp-badge">Model Context Protocol 2024-11-05</div>
+                <h3 class="mcp-title">让任何 AI 宿主直连 EAM 工业资产大脑</h3>
+                <p class="mcp-subtitle">支持 Claude Desktop、Cursor、Cline、Continue 等宿主，通过 stdio 管道或云端 SSE 协议无缝驱动设备运维。</p>
+              </div>
+              <div class="mcp-banner-action">
+                <div class="key-selector-wrap">
+                  <span class="key-selector-label">选择注入密钥：</span>
+                  <el-select v-model="selectedKeyForMCP" placeholder="选择已有 API 密钥自动填充" clearable style="width: 240px">
+                    <el-option
+                      v-for="k in apiKeys"
+                      :key="k.id"
+                      :label="k.name + ' (' + (k.scopes || '全权限') + ')'"
+                      :value="k.key || ('ems_key_' + k.id)"
+                    />
+                  </el-select>
+                </div>
+              </div>
+            </div>
 
-请求头认证:
-Authorization: Bearer 您的_API_密钥</code></pre>
+            <!-- Client Mode Cards -->
+            <el-row :gutter="24" style="margin-top: 20px">
+              <!-- Mode 1: Claude Desktop (stdio) -->
+              <el-col :span="12">
+                <div class="shoji-card">
+                  <div class="mac-window">
+                    <div class="mac-titlebar">
+                      <div class="mac-traffic-lights">
+                        <span class="mac-dot close"></span>
+                        <span class="mac-dot min"></span>
+                        <span class="mac-dot max"></span>
+                      </div>
+                      <span class="mac-title">claude_desktop_config.json</span>
+                      <el-button size="small" type="primary" link @click="copyCode(claudeDesktopConfig)">
+                        <el-icon style="margin-right: 4px"><DocumentCopy /></el-icon> 复制配置
+                      </el-button>
+                    </div>
+                    <div class="mac-code-area">
+                      <pre><code>{{ claudeDesktopConfig }}</code></pre>
+                    </div>
                   </div>
-                </el-card>
+                  <div class="card-instruction">
+                    <h4><span class="step-num">1</span> Claude Desktop 接入步骤</h4>
+                    <p>编辑配置文件后重启 Claude，右下角将显示 <kbd>🔨</kbd> 工业工具箱：</p>
+                    <ul>
+                      <li><b>macOS:</b> <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></li>
+                      <li><b>Windows:</b> <code>%APPDATA%\Claude\claude_desktop_config.json</code></li>
+                    </ul>
+                  </div>
+                </div>
+              </el-col>
+
+              <!-- Mode 2: Cursor / SSE -->
+              <el-col :span="12">
+                <div class="shoji-card">
+                  <div class="mac-window">
+                    <div class="mac-titlebar">
+                      <div class="mac-traffic-lights">
+                        <span class="mac-dot close"></span>
+                        <span class="mac-dot min"></span>
+                        <span class="mac-dot max"></span>
+                      </div>
+                      <span class="mac-title">Cursor / Cline SSE (云端直连)</span>
+                      <el-button size="small" type="primary" link @click="copyCode(cursorSSEConfig)">
+                        <el-icon style="margin-right: 4px"><DocumentCopy /></el-icon> 复制配置
+                      </el-button>
+                    </div>
+                    <div class="mac-code-area">
+                      <pre><code>{{ cursorSSEConfig }}</code></pre>
+                    </div>
+                  </div>
+                  <div class="card-instruction">
+                    <h4><span class="step-num">2</span> 原生 SSE 云端接入（免本地程序）</h4>
+                    <p>在 Cursor 的 <b>Settings → Features → MCP</b> 中直接添加 SSE 服务器：</p>
+                    <ul>
+                      <li><b>Type:</b> <code>sse</code></li>
+                      <li><b>URL:</b> <code>{{ originUrl }}/api/v1/mcp/sse</code></li>
+                      <li><b>Header:</b> <code>Authorization: Bearer {{ activeTokenDisplay }}</code></li>
+                    </ul>
+                  </div>
+                </div>
               </el-col>
             </el-row>
           </div>
@@ -279,6 +315,55 @@ import { agentApi } from '@/api/agent'
 // Tab state
 const activeTab = ref('apikeys')
 const originUrl = computed(() => (typeof window !== 'undefined' ? window.location.origin : 'https://eam.example.com'))
+
+const selectedKeyForMCP = ref('')
+
+const activeTokenDisplay = computed(() => {
+  return selectedKeyForMCP.value || 'ems_your_api_key_here'
+})
+
+const claudeDesktopConfig = computed(() => {
+  const conf = {
+    mcpServers: {
+      "eam-agent": {
+        command: "/path/to/EAM-Agent/backend/bin/eam-mcp",
+        env: {
+          EAM_BASE_URL: originUrl.value,
+          EAM_TOKEN: activeTokenDisplay.value
+        }
+      }
+    }
+  }
+  return JSON.stringify(conf, null, 2)
+})
+
+const cursorSSEConfig = computed(() => {
+  return `# Cursor MCP Server 配置 (SSE 模式)
+Type: sse
+URL: ${originUrl.value}/api/v1/mcp/sse
+Headers:
+  Authorization: Bearer ${activeTokenDisplay.value}`
+})
+
+const copyCode = async (text: string) => {
+  try {
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(text)
+      ElMessage.success('配置已成功复制到剪贴板！')
+    } else {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      ElMessage.success('配置已成功复制到剪贴板！')
+    }
+  } catch (err: any) {
+    ElMessage.error('复制失败: ' + err.message)
+  }
+}
+
 
 // Data formatters
 const formatDate = (dateStr: string) => {
@@ -586,4 +671,125 @@ onMounted(() => {
   line-height: 1.5;
   margin-top: 4px;
 }
+
+/* Shoji-inspired MCP Banner & Cards */
+.mcp-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(10, 124, 255, 0.05) 0%, rgba(10, 124, 255, 0.02) 100%);
+  border-radius: 20px;
+  box-shadow: 0 0 0 1px rgba(10, 124, 255, 0.12);
+  margin-bottom: 24px;
+}
+
+.mcp-badge {
+  display: inline-flex;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #0a7cff;
+  background: rgba(10, 124, 255, 0.1);
+  margin-bottom: 10px;
+}
+
+.mcp-title {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  font-weight: 650;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.mcp-subtitle {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.key-selector-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-bg-secondary);
+  padding: 8px 14px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
+.key-selector-label {
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.mac-code-area {
+  padding: 16px 20px;
+  background: #141418;
+  color: #e4e4e8;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.mac-code-area pre {
+  margin: 0;
+}
+
+.card-instruction {
+  padding: 20px 24px;
+}
+
+.card-instruction h4 {
+  margin: 0 0 10px 0;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-primary);
+}
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.card-instruction p {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0 0 10px 0;
+}
+
+.card-instruction ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+}
+
+.card-instruction code {
+  background: var(--color-bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-text-primary);
+}
+
 </style>
