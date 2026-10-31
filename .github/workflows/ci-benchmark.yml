@@ -1,0 +1,53 @@
+name: CI Runner Benchmark (GitHub vs InstaBox)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  github-backend:
+    name: GitHub (ubuntu-latest) - Backend Go Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+      - name: Run Tests
+        run: cd backend && go test ./...
+
+  github-frontend:
+    name: GitHub (ubuntu-latest) - Frontend Vite Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build
+        run: cd frontend && npm ci && npm run build
+
+  instabox-backend:
+    name: InstaBox (instabox-medium) - Backend Go Test
+    runs-on: instabox-medium
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+      - name: Run Tests
+        run: cd backend && go test ./...
+
+  instabox-frontend:
+    name: InstaBox (instabox-medium) - Frontend Vite Build
+    runs-on: instabox-medium
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build
+        run: cd frontend && npm ci && npm run build
