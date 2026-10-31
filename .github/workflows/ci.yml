@@ -8,7 +8,7 @@ on:
 
 jobs:
   backend-test:
-    runs-on: ubuntu-latest
+    runs-on: instabox-medium
     steps:
       - uses: actions/checkout@v4
       - name: Set up Go
@@ -39,7 +39,7 @@ jobs:
           fi
 
   frontend-build:
-    runs-on: ubuntu-latest
+    runs-on: instabox-medium
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
