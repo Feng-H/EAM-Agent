@@ -16,6 +16,7 @@ import './styles/design-system.css'
 import './styles/utilities.css'
 import './styles/h5.css'
 import './styles/pc.css'
+import './styles/blueprint.css'
 
 const app = createApp(App)
 const pinia = createPinia()

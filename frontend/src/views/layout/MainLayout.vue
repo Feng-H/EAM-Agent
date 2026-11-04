@@ -311,6 +311,26 @@
         </div>
 
         <div class="header-right">
+          <!-- UI 风格切换器 (Cupertino 苹果柔光 vs Protocol 蓝图工控) -->
+          <div class="style-switcher">
+            <button
+              class="style-toggle-btn"
+              @click="themeStore.toggleUiStyle()"
+              :title="themeStore.uiStyle === 'blueprint' ? '当前: Protocol 蓝图工控 (点击切换至 Cupertino 苹果柔光)' : '当前: Cupertino 苹果柔光 (点击切换至 Protocol 蓝图工控)'"
+            >
+              <svg v-if="themeStore.uiStyle === 'blueprint'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width: 14px; height: 14px;">
+                <path d="M3 3h18v18H3z" stroke-dasharray="2 2"/>
+                <path d="M3 9h18M9 3v18"/>
+                <circle cx="9" cy="9" r="2" fill="currentColor"/>
+              </svg>
+              <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width: 14px; height: 14px;">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                <path d="M12 6a6 6 0 0 1 6 6c0 3.31-2.69 6-6 6"/>
+              </svg>
+              <span class="style-label">{{ themeStore.uiStyle === 'blueprint' ? 'PROTOCOL' : 'CUPERTINO' }}</span>
+            </button>
+          </div>
+
           <!-- 主题切换 -->
           <button class="theme-toggle" @click="themeStore.toggleTheme()" :title="themeStore.theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'">
             <svg v-if="themeStore.theme === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

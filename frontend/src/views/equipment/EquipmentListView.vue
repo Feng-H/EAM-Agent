@@ -72,7 +72,7 @@
         stripe
         class="custom-table"
       >
-        <el-table-column type="index" label="序号" width="60" align="center" />
+        <el-table-column type="index" label="序号" width="75" align="center" />
         <el-table-column prop="code" label="设备编号" width="140" show-overflow-tooltip />
         <el-table-column prop="name" label="设备名称" min-width="180" show-overflow-tooltip>
           <template #default="{ row }">

@@ -27,6 +27,9 @@
             <span>EAM-Agent · Enterprise Asset Brain</span>
           </div>
           <div class="window-actions-spacer">
+            <button class="login-style-toggle" @click="themeStore.toggleUiStyle()" :title="themeStore.uiStyle === 'blueprint' ? '切换为 Cupertino 苹果柔光' : '切换为 Protocol 蓝图工控'">
+              <span>{{ themeStore.uiStyle === 'blueprint' ? '📐 PROTOCOL' : '🍎 CUPERTINO' }}</span>
+            </button>
             <span class="version-tag">v2.1 Pro</span>
           </div>
         </div>
@@ -231,12 +234,14 @@
 import { reactive, ref, onMounted, h } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useThemeStore } from '@/stores/theme'
 import { authApi, type ApplyAccountRequest } from '@/api/auth'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const themeStore = useThemeStore()
 
 const formRef = ref<FormInstance>()
 const loading = ref(false)

@@ -1,0 +1,582 @@
+/* ==========================================================================
+   EAM-Agent · Protocol Explorer / Neo-Blueprint Aesthetic System
+   Inspired by protocol-explorer-alpha.vercel.app
+   Features:
+   - Technical Monospace Typography and All-Caps Telemetry Headers
+   - 1px Precision Hairline Borders and 3px Micro-Radius
+   - Cobalt / Royal Blue (#0038A8) and High-Contrast Flat Surfaces
+   - Isometric and Orthogonal Engineering Grid Canvas
+   - Zero Drop Blur Shadows (Pure Flat CAD / HUD Depth)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Root Variables and Typography Tokens for Blueprint Mode
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] {
+  --font-blueprint-mono: 'Iosevka', 'Share Tech Mono', 'SF Mono', 'Geist Mono', Menlo, Monaco, Consolas, ui-monospace, monospace;
+  --font-sans: var(--font-blueprint-mono) !important;
+  --font-serif: var(--font-blueprint-mono) !important;
+  --font-mono: var(--font-blueprint-mono) !important;
+  --font-display: var(--font-blueprint-mono) !important;
+
+  /* Precision Radii */
+  --radius-sharp: 0px !important;
+  --radius-subtle: 2px !important;
+  --radius-comfortable: 3px !important;
+  --radius-generous: 4px !important;
+  --radius-very: 4px !important;
+  --radius-high: 4px !important;
+  --radius-max: 4px !important;
+
+  /* Zero Blur Shadows */
+  --shadow-sm: none !important;
+  --shadow-md: none !important;
+  --shadow-lg: none !important;
+  --shadow-xl: none !important;
+
+  /* Light Theme Blueprint Palette */
+  --bp-cobalt: #0038A8;
+  --bp-cobalt-light: #0047AB;
+  --bp-cobalt-subtle: rgba(0, 56, 168, 0.08);
+  --bp-cobalt-border: rgba(0, 56, 168, 0.22);
+  --bp-cobalt-grid: rgba(0, 56, 168, 0.05);
+  --bp-bg-canvas: #f8fafd;
+  --bp-bg-card: #ffffff;
+  --bp-bg-sidebar: #f2f5fa;
+  --bp-text-primary: #001f5c;
+  --bp-text-secondary: #0038a8;
+  --bp-text-muted: #5a73a3;
+}
+
+[data-ui-style="blueprint"][data-theme="dark"] {
+  /* Dark Theme Cyber Blueprint Palette */
+  --bp-cobalt: #3b82f6;
+  --bp-cobalt-light: #60a5fa;
+  --bp-cobalt-subtle: rgba(59, 130, 246, 0.12);
+  --bp-cobalt-border: rgba(59, 130, 246, 0.28);
+  --bp-cobalt-grid: rgba(59, 130, 246, 0.07);
+  --bp-bg-canvas: #070d19;
+  --bp-bg-card: #0d1629;
+  --bp-bg-sidebar: #09101f;
+  --bp-text-primary: #e2e8f0;
+  --bp-text-secondary: #93c5fd;
+  --bp-text-muted: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   2. Global Canvas and Blueprint Grid Pattern
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] body,
+[data-ui-style="blueprint"] .main-content,
+[data-ui-style="blueprint"] .content {
+  font-family: var(--font-blueprint-mono) !important;
+  background-color: var(--bp-bg-canvas) !important;
+  background-image: 
+    linear-gradient(var(--bp-cobalt-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-cobalt-grid) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
+  color: var(--bp-text-primary) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Sidebar (Blueprint Command Deck)
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] .sidebar {
+  background: var(--bp-bg-sidebar) !important;
+  border-right: 1px solid var(--bp-cobalt-border) !important;
+  backdrop-filter: none !important;
+}
+
+[data-ui-style="blueprint"] .sidebar-header {
+  border-bottom: 1px solid var(--bp-cobalt-border) !important;
+  padding: 16px 18px !important;
+}
+
+[data-ui-style="blueprint"] .logo-text {
+  font-family: var(--font-blueprint-mono) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--bp-cobalt) !important;
+  text-transform: uppercase !important;
+}
+
+[data-ui-style="blueprint"] .logo-icon {
+  border-radius: 3px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  position: relative;
+}
+
+[data-ui-style="blueprint"] .logo-icon::before {
+  content: '[';
+  position: absolute;
+  left: -9px;
+  top: 1px;
+  color: var(--bp-cobalt);
+  font-family: var(--font-blueprint-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+[data-ui-style="blueprint"] .logo-icon::after {
+  content: ']';
+  position: absolute;
+  right: -9px;
+  top: 1px;
+  color: var(--bp-cobalt);
+  font-family: var(--font-blueprint-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+[data-ui-style="blueprint"] .nav-group-title {
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.12em !important;
+  color: var(--bp-text-muted) !important;
+  text-transform: uppercase !important;
+  padding: 0 16px !important;
+  margin-bottom: 6px !important;
+}
+
+[data-ui-style="blueprint"] .nav-item {
+  border-radius: 2px !important;
+  margin: 3px 10px !important;
+  padding: 8px 12px !important;
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--bp-text-primary) !important;
+  border: 1px solid transparent !important;
+  transition: all 0.1s ease-in-out !important;
+}
+
+[data-ui-style="blueprint"] .nav-item:hover {
+  background: var(--bp-cobalt-subtle) !important;
+  border-color: var(--bp-cobalt-border) !important;
+  color: var(--bp-cobalt) !important;
+}
+
+[data-ui-style="blueprint"] .nav-item.active {
+  background: var(--bp-cobalt) !important;
+  color: #ffffff !important;
+  border-color: var(--bp-cobalt) !important;
+  font-weight: 700 !important;
+}
+
+[data-ui-style="blueprint"] .nav-subitem {
+  border-radius: 2px !important;
+  margin: 2px 10px 2px 24px !important;
+  padding: 6px 12px !important;
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 11.5px !important;
+  color: var(--bp-text-muted) !important;
+  border-left: 2px solid transparent !important;
+}
+
+[data-ui-style="blueprint"] .nav-subitem:hover {
+  background: var(--bp-cobalt-subtle) !important;
+  color: var(--bp-cobalt) !important;
+}
+
+[data-ui-style="blueprint"] .nav-subitem.active {
+  background: var(--bp-cobalt-subtle) !important;
+  color: var(--bp-cobalt) !important;
+  border-left: 2px solid var(--bp-cobalt) !important;
+  font-weight: 700 !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Header and Top Control Bar
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] .header {
+  background: var(--bp-bg-canvas) !important;
+  border-bottom: 1px solid var(--bp-cobalt-border) !important;
+  backdrop-filter: none !important;
+  height: 52px !important;
+}
+
+[data-ui-style="blueprint"] .breadcrumb-current {
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: var(--bp-cobalt) !important;
+  text-transform: uppercase !important;
+}
+
+[data-ui-style="blueprint"] .breadcrumb-current::before {
+  content: 'SYS // ';
+  color: var(--bp-text-muted);
+  font-weight: 400;
+}
+
+[data-ui-style="blueprint"] .header-icon-btn,
+[data-ui-style="blueprint"] .theme-toggle,
+[data-ui-style="blueprint"] .logout-btn,
+[data-ui-style="blueprint"] .style-toggle-btn {
+  border-radius: 3px !important;
+  background: var(--bp-bg-card) !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  color: var(--bp-cobalt) !important;
+  box-shadow: none !important;
+  transition: all 0.1s ease !important;
+}
+
+[data-ui-style="blueprint"] .header-icon-btn:hover,
+[data-ui-style="blueprint"] .theme-toggle:hover,
+[data-ui-style="blueprint"] .logout-btn:hover,
+[data-ui-style="blueprint"] .style-toggle-btn:hover {
+  background: var(--bp-cobalt-subtle) !important;
+  border-color: var(--bp-cobalt) !important;
+}
+
+[data-ui-style="blueprint"] .user-section {
+  border-radius: 3px !important;
+  background: var(--bp-bg-card) !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  padding: 4px 10px !important;
+}
+
+[data-ui-style="blueprint"] .user-name {
+  font-family: var(--font-blueprint-mono) !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  color: var(--bp-text-primary) !important;
+  text-transform: uppercase !important;
+}
+
+[data-ui-style="blueprint"] .user-avatar {
+  border-radius: 2px !important;
+  background: var(--bp-cobalt) !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Cards, Bento Panels and Containers
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] .el-card,
+[data-ui-style="blueprint"] .section-card,
+[data-ui-style="blueprint"] .org-main-card,
+[data-ui-style="blueprint"] .template-list-card,
+[data-ui-style="blueprint"] .template-detail-card,
+[data-ui-style="blueprint"] .stat-card,
+[data-ui-style="blueprint"] .bento-cell {
+  background: var(--bp-bg-card) !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+[data-ui-style="blueprint"] .el-card__header,
+[data-ui-style="blueprint"] .card-header-flex,
+[data-ui-style="blueprint"] .org-header-flex {
+  border-bottom: 1px dashed var(--bp-cobalt-border) !important;
+  padding: 12px 16px !important;
+}
+
+[data-ui-style="blueprint"] .page-title,
+[data-ui-style="blueprint"] .panel-main-title,
+[data-ui-style="blueprint"] .org-title {
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  color: var(--bp-cobalt) !important;
+  text-transform: uppercase !important;
+}
+
+[data-ui-style="blueprint"] .panel-main-title::before,
+[data-ui-style="blueprint"] .org-title::before {
+  content: '// ';
+  color: var(--bp-text-muted);
+}
+
+[data-ui-style="blueprint"] .panel-sub-title,
+[data-ui-style="blueprint"] .org-subtitle {
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 11px !important;
+  color: var(--bp-text-muted) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. Tables (Telemetry Precision Matrix)
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] .el-table {
+  background: var(--bp-bg-card) !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  border-radius: 3px !important;
+  font-family: var(--font-blueprint-mono) !important;
+}
+
+[data-ui-style="blueprint"] .el-table th.el-table__cell {
+  background: var(--bp-cobalt-subtle) !important;
+  color: var(--bp-cobalt) !important;
+  font-weight: 700 !important;
+  font-size: 11.5px !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid var(--bp-cobalt-border) !important;
+}
+
+[data-ui-style="blueprint"] .el-table td.el-table__cell {
+  font-size: 12.5px !important;
+  border-bottom: 1px solid var(--bp-cobalt-border) !important;
+}
+
+[data-ui-style="blueprint"] .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background: rgba(0, 56, 168, 0.02) !important;
+}
+
+[data-ui-style="blueprint"][data-theme="dark"] .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background: rgba(59, 130, 246, 0.03) !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. Buttons and Form Inputs
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] .el-button,
+[data-ui-style="blueprint"] .macos-primary-btn {
+  border-radius: 3px !important;
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  box-shadow: none !important;
+}
+
+[data-ui-style="blueprint"] .el-button--primary,
+[data-ui-style="blueprint"] .macos-primary-btn {
+  background: var(--bp-cobalt) !important;
+  border-color: var(--bp-cobalt) !important;
+  color: #ffffff !important;
+}
+
+[data-ui-style="blueprint"] .el-button--primary:hover,
+[data-ui-style="blueprint"] .macos-primary-btn:hover {
+  background: var(--bp-cobalt-light) !important;
+  border-color: var(--bp-cobalt-light) !important;
+}
+
+[data-ui-style="blueprint"] .el-input__wrapper,
+[data-ui-style="blueprint"] .el-select__wrapper {
+  border-radius: 3px !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  background: var(--bp-bg-card) !important;
+  box-shadow: none !important;
+  font-family: var(--font-blueprint-mono) !important;
+}
+
+[data-ui-style="blueprint"] .el-input__wrapper.is-focus,
+[data-ui-style="blueprint"] .el-select__wrapper.is-focused {
+  border-color: var(--bp-cobalt) !important;
+  box-shadow: 0 0 0 1px var(--bp-cobalt) !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. Tags, Badges and Chips
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] .el-tag {
+  border-radius: 2px !important;
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  border: 1px solid currentColor !important;
+  padding: 0 6px !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. Master-Detail Stream in Blueprint Mode
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] .tpl-card-item {
+  border-radius: 3px !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  background: var(--bp-bg-card) !important;
+  box-shadow: none !important;
+}
+
+[data-ui-style="blueprint"] .tpl-card-item:hover {
+  border-color: var(--bp-cobalt) !important;
+  background: var(--bp-cobalt-subtle) !important;
+  transform: none !important;
+}
+
+[data-ui-style="blueprint"] .tpl-card-item.active {
+  border: 1px solid var(--bp-cobalt) !important;
+  background: var(--bp-cobalt-subtle) !important;
+  box-shadow: inset 3px 0 0 0 var(--bp-cobalt) !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. Quick Style Switcher in Header
+   -------------------------------------------------------------------------- */
+.style-switcher {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.style-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(10, 124, 255, 0.08);
+  border: 1px solid rgba(10, 124, 255, 0.2);
+  color: #0a7cff;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.style-toggle-btn:hover {
+  background: rgba(10, 124, 255, 0.16);
+  border-color: #0a7cff;
+}
+
+[data-ui-style="blueprint"] .style-toggle-btn {
+  border-radius: 3px !important;
+  background: var(--bp-cobalt-subtle) !important;
+  border: 1px solid var(--bp-cobalt) !important;
+  color: var(--bp-cobalt) !important;
+  font-family: var(--font-blueprint-mono) !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+.style-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.style-label {
+  font-size: 11px;
+}
+
+/* --------------------------------------------------------------------------
+   11. Login View in Blueprint Mode (Neo-Blueprint Terminal Auth Deck)
+   -------------------------------------------------------------------------- */
+[data-ui-style="blueprint"] .login-container {
+  background-color: var(--bp-bg-canvas) !important;
+  background-image: 
+    linear-gradient(var(--bp-cobalt-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-cobalt-grid) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
+  font-family: var(--font-blueprint-mono) !important;
+}
+
+[data-ui-style="blueprint"] .macos-aura-bg {
+  display: none !important;
+}
+
+[data-ui-style="blueprint"] .macos-window-card {
+  border-radius: 4px !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  background: var(--bp-bg-card) !important;
+  box-shadow: none !important;
+}
+
+[data-ui-style="blueprint"] .window-chrome {
+  border-bottom: 1px solid var(--bp-cobalt-border) !important;
+  background: var(--bp-bg-sidebar) !important;
+  padding: 10px 16px !important;
+}
+
+[data-ui-style="blueprint"] .window-title-chip {
+  background: var(--bp-bg-card) !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  border-radius: 2px !important;
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  color: var(--bp-cobalt) !important;
+  text-transform: uppercase !important;
+}
+
+[data-ui-style="blueprint"] .window-sidebar {
+  background: var(--bp-bg-sidebar) !important;
+  border-right: 1px solid var(--bp-cobalt-border) !important;
+}
+
+[data-ui-style="blueprint"] .app-squircle-icon {
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  background: transparent !important;
+}
+
+[data-ui-style="blueprint"] .app-name-large {
+  font-family: var(--font-blueprint-mono) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: var(--bp-cobalt) !important;
+  text-transform: uppercase !important;
+}
+
+[data-ui-style="blueprint"] .app-slogan {
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 11.5px !important;
+  color: var(--bp-text-muted) !important;
+}
+
+[data-ui-style="blueprint"] .feature-item {
+  border-radius: 3px !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  background: var(--bp-bg-card) !important;
+  font-family: var(--font-blueprint-mono) !important;
+}
+
+[data-ui-style="blueprint"] .input-label {
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: var(--bp-cobalt) !important;
+  text-transform: uppercase !important;
+}
+
+[data-ui-style="blueprint"] .quick-fill-btn {
+  border-radius: 2px !important;
+  border: 1px solid var(--bp-cobalt-border) !important;
+  background: var(--bp-bg-sidebar) !important;
+  color: var(--bp-cobalt) !important;
+  font-family: var(--font-blueprint-mono) !important;
+  font-size: 11px !important;
+}
+
+/* Style Switcher in Login */
+.login-style-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(10, 124, 255, 0.08);
+  border: 1px solid rgba(10, 124, 255, 0.2);
+  color: #0a7cff;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+}
+
+.login-style-toggle:hover {
+  background: rgba(10, 124, 255, 0.16);
+  border-color: #0a7cff;
+}
+
+[data-ui-style="blueprint"] .login-style-toggle {
+  border-radius: 2px !important;
+  background: var(--bp-cobalt-subtle) !important;
+  border: 1px solid var(--bp-cobalt) !important;
+  color: var(--bp-cobalt) !important;
+  font-family: var(--font-blueprint-mono) !important;
+}
