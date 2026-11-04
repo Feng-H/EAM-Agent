@@ -29,13 +29,27 @@ jobs:
             instabox rm "$box" --yes || true
           done
 
-      - name: Launch Test Sandbox
+      - name: Launch Test Sandbox (with Quota Contention Retry)
         env:
           INSTABOX_API_KEY: ${{ secrets.INSTABOX_API_KEY }}
         run: |
           BOX_NAME="eam-ci-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           echo "BOX_NAME=$BOX_NAME" >> $GITHUB_ENV
-          instabox create --name "$BOX_NAME" --snapshot ems-demo-v2 --delete-after 15m
+          CREATED=0
+          for attempt in $(seq 1 6); do
+            echo "Attempt $attempt/6: Creating sandbox $BOX_NAME..."
+            if instabox create --name "$BOX_NAME" --snapshot ems-demo-v2 --delete-after 15m; then
+              echo "Sandbox $BOX_NAME successfully launched!"
+              CREATED=1
+              break
+            fi
+            echo "Quota busy or concurrent jobs running. Waiting 15s before retry..."
+            sleep 15
+          done
+          if [ "$CREATED" -ne 1 ]; then
+            echo "Failed to create sandbox after 6 attempts."
+            exit 1
+          fi
 
       - name: Run Full-Stack Health and API Verification
         env:
