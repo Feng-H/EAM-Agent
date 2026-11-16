@@ -36,7 +36,11 @@ main:
     - name: sync-to-github
       imports: https://cnb.cool/Feng-H/secrets/-/blob/main/env.yml
       image: alpine/git
-      script: |
-        git remote add github "https://Feng-H:${GITHUB_TOKEN}@github.com/Feng-H/EAM-Agent.git" 2>/dev/null || true
-        git push -f github HEAD:main
-        git push -f github --tags
+      stages:
+        - name: push to github
+          script: |
+            set -e
+            git remote add github "https://Feng-H:${GITHUB_TOKEN}@github.com/Feng-H/EAM-Agent.git" 2>/dev/null || true
+            if [ -z "$GITHUB_TOKEN" ]; then echo 'GITHUB_TOKEN is empty - imports failed'; exit 1; fi
+            git push -f github HEAD:main
+            git push -f github --tags
