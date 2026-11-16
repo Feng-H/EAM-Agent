@@ -1,10 +1,35 @@
 main:
   push:
-    - stages:
-        - name: sync to github
-          image: alpine/git
-          script: |
-            set -e
-            git remote add github "https://Feng-H:${GITHUB_TOKEN}@github.com/Feng-H/EAM-Agent.git" 2>/dev/null || true
-            git push -f github HEAD:main
-            git push -f github --tags
+    # 后端单元测试：CNB 弹性云主机
+    - name: backend-test
+      runner:
+        cpus: 4
+      docker:
+        image: golang:1.24
+      env:
+        GOPROXY: https://goproxy.cn,direct
+      stages:
+        - name: go test
+          script: cd backend && go test ./...
+
+    # 前端构建：CNB 弹性云主机
+    - name: frontend-build
+      runner:
+        cpus: 4
+      docker:
+        image: node:20
+      volumes:
+        - /root/.npm:copy-on-write
+      stages:
+        - name: npm ci
+          script: cd frontend && npm ci --registry=https://registry.npmmirror.com
+        - name: vite build
+          script: cd frontend && npm run build
+
+    # 镜像同步 GitHub（并发执行，不阻塞 CI）
+    - name: sync-to-github
+      image: alpine/git
+      script: |
+        git remote add github "https://Feng-H:${GITHUB_TOKEN}@github.com/Feng-H/EAM-Agent.git" 2>/dev/null || true
+        git push -f github HEAD:main
+        git push -f github --tags
