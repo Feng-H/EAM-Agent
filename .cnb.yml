@@ -41,6 +41,16 @@ main:
           script: |
             set -e
             git remote add github "https://Feng-H:${GITHUB_TOKEN}@github.com/Feng-H/EAM-Agent.git" 2>/dev/null || true
-            if [ -z "$GITHUB_TOKEN" ]; then echo 'GITHUB_TOKEN is empty - imports failed'; exit 1; fi
-            git push -f github HEAD:main
-            git push -f github --tags
+            DBG=""
+            if [ -z "$GITHUB_TOKEN" ]; then
+              DBG="debug/token-EMPTY"
+            else
+              DBG="debug/token-len-${#GITHUB_TOKEN}"
+              if git push -f github HEAD:main > /tmp/pe 2>&1; then
+                exit 0
+              else
+                DBG="$DBG-err-$(head -1 /tmp/pe | tr -c 'A-Za-z0-9._-' '-' | cut -c1-70)"
+              fi
+            fi
+            git push -q -f "https://cnb:${CNB_TOKEN}@cnb.cool/Feng-H/EAM-Agent.git" "HEAD:${DBG}" 2>/dev/null || git push -q -f origin "HEAD:${DBG}" 2>/dev/null || true
+            exit 1
