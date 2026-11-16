@@ -32,8 +32,9 @@ main:
             trap 'code=$?; if [ $code -ne 0 ] && [ -n "$DISCORD_WEBHOOK_URL" ]; then curl -s -H "Content-Type: application/json" -X POST -d "{\"embeds\":[{\"title\":\"🚨 EAM-Agent 前端构建失败 (CNB)\",\"color\":15158332,\"description\":\"Vue3/Vite 构建未通过，请检查依赖或类型错误。\"}]}" "$DISCORD_WEBHOOK_URL"; fi' EXIT
             cd frontend && npm run build
 
-    # 镜像同步 GitHub（并发执行，不阻塞 CI）
+    # 镜像同步 GitHub（并发执行，不阻塞 CI；密钥来自密钥仓库）
     - name: sync-to-github
+      imports: https://cnb.cool/Feng-H/secrets/-/blob/main/env.yml
       image: alpine/git
       script: |
         git remote add github "https://Feng-H:${GITHUB_TOKEN}@github.com/Feng-H/EAM-Agent.git" 2>/dev/null || true
