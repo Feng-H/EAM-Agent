@@ -10,7 +10,10 @@ main:
         GOPROXY: https://goproxy.cn,direct
       stages:
         - name: go test
-          script: cd backend && go test ./...
+          script: |
+            set -e
+            trap 'code=$?; if [ $code -ne 0 ] && [ -n "$DISCORD_WEBHOOK_URL" ]; then curl -s -H "Content-Type: application/json" -X POST -d "{\"embeds\":[{\"title\":\"🚨 EAM-Agent 后端单元测试失败 (CNB)\",\"color\":15158332,\"description\":\"Go 单元测试未通过，请检查代码变更。\"}]}" "$DISCORD_WEBHOOK_URL"; fi' EXIT
+            cd backend && go test ./...
 
     # 前端构建：CNB 弹性云主机
     - name: frontend-build
@@ -24,7 +27,10 @@ main:
         - name: npm ci
           script: cd frontend && npm ci --registry=https://registry.npmmirror.com
         - name: vite build
-          script: cd frontend && npm run build
+          script: |
+            set -e
+            trap 'code=$?; if [ $code -ne 0 ] && [ -n "$DISCORD_WEBHOOK_URL" ]; then curl -s -H "Content-Type: application/json" -X POST -d "{\"embeds\":[{\"title\":\"🚨 EAM-Agent 前端构建失败 (CNB)\",\"color\":15158332,\"description\":\"Vue3/Vite 构建未通过，请检查依赖或类型错误。\"}]}" "$DISCORD_WEBHOOK_URL"; fi' EXIT
+            cd frontend && npm run build
 
     # 镜像同步 GitHub（并发执行，不阻塞 CI）
     - name: sync-to-github
